@@ -1,0 +1,1 @@
+How often should the client submit its state to the backend?

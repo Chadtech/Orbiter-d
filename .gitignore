@@ -1,0 +1,7 @@
+elm-stuff
+node_modules
+public/elm.js
+public/app.js
+public/style.css
+public/lander-palette.ase
+public/**/*.ase
