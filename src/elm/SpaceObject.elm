@@ -3,7 +3,7 @@ module SpaceObject exposing (..)
 import Types exposing (..)
 import Engine exposing (..)
 
-type alias SpaceObjects = List (String, SpaceObject)
+type alias SpaceObjects = List SpaceObject
 type alias Player = SpaceObject
 
 type OnCollision = 
@@ -27,4 +27,101 @@ type alias SpaceObject =
   , engine      : Engine
   }
 
+o2Box : SpaceObject
+o2Box =
+  let
+    gx = 44900
+    gy = 60000
 
+    sector = 
+      (floor (gx / 600), floor (gy / 600))
+  in
+  { angle       = (10, -10)
+  , local       = (gx, gy)
+  , global      = (gx, gy)
+  , velocity    = (0, -100)
+  , sector      = sector
+  , direction   = 0
+  , dimensions  = (20, 20)
+  , fuel        = 505.1
+  , air         = 63
+  , mass        = 852
+  , onCollision = OnCollision (\s -> s)
+  , name        = "air box"
+  , uuid        = "12"
+  , engine      =
+    { boost     = False
+    , thrusters = []
+    }
+  , sprite =
+    { src        = "stuff/oxygen-tank"
+    , dimensions = (20, 20)
+    , position   = (0,0)
+    }
+  }
+
+playersShip : SpaceObject
+playersShip =
+  let
+    gx = 44850
+    gy = 60000
+
+    sector = 
+      (floor (gx / 600), floor (gy / 600))
+  in
+  { angle       = (10, -10)
+  , local       = (gx, gy)
+  , global      = (gx, gy)
+  , velocity    = (10, -100)
+  , sector      = sector
+  , direction   = 0
+  , dimensions  = (34, 29)
+  , fuel        = 505.1
+  , air         = 63
+  , mass        = 852
+  , onCollision = OnCollision (\s -> s)
+  , name        = "Frege"
+  , uuid        = "40"
+  , engine      =
+    { boost     = False
+    , thrusters = []
+    }
+  , sprite =
+    { src        = "ship/ship"
+    , dimensions = (47, 47)
+    , position   = (0,0)
+    }
+  }
+
+dummyShip : SpaceObject
+dummyShip =
+  let
+    gx = 0
+    gy = 0
+
+    sector = 
+      (floor (gx / 600), floor (gy / 600))
+  in
+  { angle       = (0, 0)
+  , local       = (gx, gy)
+  , global      = (gx, gy)
+  , velocity    = (0, 0)
+  , sector      = sector
+  , direction   = 0
+  , dimensions  = (34, 29)
+  , fuel        = 505.1
+  , air         = 63
+  , mass        = 852
+  , onCollision = OnCollision (\s -> s)
+  , name        = "dummy"
+  , uuid        = "21"
+  , engine      =
+    { boost     = False
+    , thrusters = []
+    }
+  , sprite =
+    { src        = "ship/ship"
+    , dimensions = (47, 47)
+    , position   = (0,0)
+    }
+  }

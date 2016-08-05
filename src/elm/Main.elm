@@ -7,6 +7,8 @@ import Game             exposing (Model)
 import Types            exposing (..)
 import HandleKeys       exposing (handleKeys)
 import View             exposing (view)
+import UpdateObjects    exposing (updateObjects)
+import Dict             exposing (toList)
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -31,7 +33,18 @@ update msg model =
   case msg of 
 
     Refresh dt ->
-      (model, Cmd.none)
+      let
+        model' =
+          let
+            {localObjects, remoteObjects} = model
+            dt' = rate dt
+          in
+          { model
+          | localObjects  = updateObjects dt' localObjects
+          , remoteObjects = updateObjects dt' remoteObjects
+          }
+      in
+      (model', Cmd.none)
 
     HandleKeys keyMsg ->
       let

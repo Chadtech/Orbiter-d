@@ -6,13 +6,13 @@ import Html.Events      exposing (..)
 import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
-import Types            exposing (Msg, Coordinate)
-import SpaceObject      exposing (SpaceObject, SpaceObjects, Player)
+import Types            exposing (..)
 import List             exposing (append, map)
 import Pather           exposing (root)
 
-miniMap : Player -> SpaceObjects -> Html Msg
-miniMap {global} objects =
+miniMap : Model -> Html Msg
+miniMap m =
+  let (x, y) = m.ship.global in
   div
   [ class "mini-map-container" ]
   [ append
@@ -23,30 +23,31 @@ miniMap {global} objects =
       |>move (-50, 0)
     , "markers/ring"
       |>image' 5 5
-      |>move (position global)
+      |>move (p x, p y)
     , "celestia/planet"
       |>image' 15 15
+      |>move (p 60000, p 60000)
     ]
-    (map draw objects)
+    (map drawThing m.things)
     |>collage 222 222 
     |>toHtml
   ]
 
--- position in map 
-position : Coordinate -> Coordinate
-position (x,y) =
-  ((x * 0.00185) - 111, (y * 0.00185) - 111)
-
-draw : SpaceObject -> Form
-draw {sprite, angle, global} =
-  let
-    (w,h) = sprite.dimensions
-    a     = fst angle
+drawThing : Thing -> Form
+drawThing t =
+  let 
+    (x,y) = t.global 
+    (w,h) = t.sprite.dimensions
+    a = fst t.angle
   in
-  sprite.src
+  t.sprite.src
   |>image' (w // 10) (h // 10)
   |>rotate (degrees a)
-  |>move (position global)
+  |>move (p x, p y)
+
+-- position in map 
+p : Float -> Float
+p f = (f * 0.00185) - 111
 
 image' : Int -> Int -> String -> Form
 image' w h src = 
