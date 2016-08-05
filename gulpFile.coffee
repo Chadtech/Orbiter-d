@@ -8,10 +8,11 @@ coffeeify  = require 'coffeeify'
 browserify = require 'browserify'
 
 paths =
-  public:   './public'
-  elm:      './src/elm/*.elm'
-  css:      './src/css/*.styl'
-  coffee:   './src/js/*.coffee'
+  public:     './public'
+  elm:        './src/elm/*.elm'
+  elmModules: './src/elm/**/*.elm'
+  css:        './src/css/*.styl'
+  js:         './src/js/*.coffee'
 
 gulp.task 'coffee', ->
   bCache = {}
@@ -44,11 +45,13 @@ gulp.task 'elm', ->
       console.log (stdout.slice 0, stdout.length - 1)
 
 gulp.task 'watch', ->
+  {elm, elmModules, css, js} = paths
   autowatch gulp,
     server:   './public/*.html'
-    stylus:   paths.css
-    coffee:   paths.coffee
-    elm:      [ paths.elm, "./src/elm/**/*.elm" ]
+    stylus:   css
+    coffee:   js
+    elm:      [ elm, elmModules ]
+
 
 gulp.task 'server', -> require './server'
 
