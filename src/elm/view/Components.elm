@@ -13,3 +13,7 @@ point s =
 tinyPoint : String -> Html Msg
 tinyPoint s =
   p [ class "point tiny" ] [ text s ]
+
+veryIgnorablePoint : String -> Html Msg
+veryIgnorablePoint s =
+  p [ class "point very-ignorable" ] [ text s ]

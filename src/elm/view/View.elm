@@ -9,13 +9,15 @@ import KeyDiagram       exposing (keyDiagram, keyExample)
 import Instructions     exposing (instructions)
 import MiniMap          exposing (miniMap)
 import ReadOut          exposing (readOut)
+import Components       exposing (veryIgnorablePoint)
 
 
 view : Model -> Html Msg
 view model =
   div
   [ class "root" ]
-  [ div
+  [ veryIgnorablePoint "Game : Orbiter D"
+  , div
     [ class "main" ]
     [ div
       [ class "left-hud" ]
