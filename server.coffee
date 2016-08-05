@@ -18,4 +18,4 @@ app.get '/', (req, res, next) ->
 
 httpServer = http.createServer app
 httpServer.listen PORT, ->
-  console.log 'SERVER RUNNING ON ' + PORT
+  console.log 'Your website is available at localhost:' + PORT

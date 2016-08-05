@@ -6,6 +6,7 @@ import Keyboard.Extra   as Keyboard
 import Game             exposing (Model)
 import Types            exposing (..)
 import HandleKeys       exposing (handleKeys)
+import View             exposing (view)
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -38,7 +39,3 @@ update msg model =
           Keyboard.update keyMsg model.keys
       in
         (handleKeys model keys, Cmd.map HandleKeys kCmd)
-
-view : Model -> Html Msg
-view model =
-  div [] [ p [class "point"] [text "WOW"] ]

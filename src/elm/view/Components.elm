@@ -3,7 +3,7 @@ module Components exposing (..)
 import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
-import Types            exposing (..)
+import Types            exposing (Msg)
 
 
 point : String -> Html Msg
@@ -12,4 +12,4 @@ point s =
 
 tinyPoint : String -> Html Msg
 tinyPoint s =
-  p [ class "point tiny" ] [ text s]
+  p [ class "point tiny" ] [ text s ]
