@@ -9,7 +9,6 @@ import Dict             exposing (get, insert)
 import List             exposing (map)
 import SpaceObject      exposing (..)
 import Maybe            exposing (withDefault)
-import Debug exposing (log)
 
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys model keys =
@@ -23,10 +22,7 @@ handleKeys model keys =
           |>withDefault dummyShip
           |>setEngine keys
       in
-      insert 
-        playerId
-        player
-        localObjects
+      insert playerId player localObjects
   }
 
 setEngine : Keyboard.Model -> Player -> Player
@@ -43,9 +39,9 @@ setEngine keys player =
 setThruster : Keyboard.Model -> Thruster -> Thruster
 setThruster keys thruster =
   if isPressed (thrustersKey thruster) keys  then
-    {thruster | firing = 1}
+    { thruster | firing = 1 }
   else
-    {thruster | firing = 0}
+    { thruster | firing = 0 }
 
 thrustersKey : Thruster -> Keyboard.Key
 thrustersKey {type'} =
