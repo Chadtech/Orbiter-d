@@ -84,7 +84,15 @@ playersShip =
   , uuid        = "40"
   , engine      =
     { boost     = False
-    , thrusters = []
+    , thrusters = 
+      [ { type' = Main,       firing = 0 }
+      , { type' = FrontLeft,  firing = 0 }
+      , { type' = FrontRight, firing = 0 }
+      , { type' = SideLeft,   firing = 0 }
+      , { type' = SideRight,  firing = 0 }
+      , { type' = BackLeft,   firing = 0 }
+      , { type' = BackRight,  firing = 0 }
+      ]
     }
   , sprite =
     { src        = "ship/ship"
