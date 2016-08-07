@@ -43,31 +43,35 @@ turn = rotate (degrees 180)
 
 drawThruster : Boost -> Thruster -> Form
 drawThruster boost {type'} =
-  let src' = blastSource boost in
+  let thruster' = thruster boost in
   case type' of
     Main ->
-      thruster (11, 30) (0, -30) (src' "main")
+      thruster' (11, 30) (0, -30) "main"
     FrontLeft ->
-      thruster (2, 9) (-19, 9) (src' "yaw")
+      thruster' (2, 9) (-19, 9) "yaw"
     FrontRight ->
-      thruster (2, 9) (20, 9) (src' "yaw-f")
+      thruster' (2, 9) (20, 9) "yaw-f"
       |>scale -1 >> turn
     SideLeft ->
-      thruster (8, 3) (26, -1) (src' "strafe")
+      thruster' (8, 3) (26, -1) "strafe"
       |>turn
     SideRight ->
-      thruster (8, 3) (-25, -1) (src' "strafe")
+      thruster' (8, 3) (-25, -1) "strafe"
     BackLeft ->
-      thruster (2, 9) (-19, -9) (src' "yaw-f")
+      thruster' (2, 9) (-19, -9) "yaw-f"
       |>scale -1
     BackRight ->
-      thruster (2, 9) (20, -9) (src' "yaw")
+      thruster' (2, 9) (20, -9) "yaw"
       |>turn
 
 image' : Int -> Int -> String -> Form
 image' w h src = 
   root src |> image w h |> toForm
 
-thruster : Dimensions -> Coordinate -> String -> Form
-thruster (w, h) position source =
-  move position <| image' w h source
+thruster : Boost -> Dimensions -> Coordinate -> String -> Form
+thruster boost (w, h) position source =
+  move position <| image' w h <| blastSource boost source
+
+
+
+

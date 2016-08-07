@@ -22,16 +22,10 @@ gameScope player objects =
       |>backdropGalaxy player
       |>backdropStars  player
       |>rotateArea     player
-    , draw     player
+    , draw player
     ]
   ]
   |>collage 600 600 >> toHtml
-
-drawPlayer : Player -> Form
-drawPlayer player =
-  [ image' 47 47 "ship/ship" ]
-  |>collage 138 138 
-  |>toForm
 
 rotateArea : Player -> Form -> Form
 rotateArea {angle} area =

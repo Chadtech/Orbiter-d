@@ -10,6 +10,7 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import List             exposing (map, filter)
 import Pather           exposing (root)
+import RenderObject
 
 populateArea : Player -> SpaceObjects -> Form -> Form
 populateArea player objects area =
@@ -38,14 +39,16 @@ adjustPosition (gx, gy) (lx, ly) object =
   (position, object)
 
 draw : (Coordinate, SpaceObject) -> Form
-draw (position, {angle, sprite}) =
+draw (position, object) =
   let
+    {angle, sprite} = object
     (w,h) = sprite.dimensions
     a     = fst angle
   in
-    root sprite.src
-    |>image w h
-    |>toForm
+    --root sprite.src
+    --|>image w h
+    --|>toForm
+    RenderObject.draw object
     |>move position
     |>rotate (degrees a)
 

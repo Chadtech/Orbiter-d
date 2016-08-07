@@ -30,7 +30,7 @@ type alias SpaceObject =
 o2Box : SpaceObject
 o2Box =
   let
-    gx = 44900
+    gx = 44750
     gy = 60000
 
     sector = 
@@ -39,7 +39,7 @@ o2Box =
   { angle       = (10, -10)
   , local       = (gx, gy)
   , global      = (gx, gy)
-  , velocity    = (0, -100)
+  , velocity    = (15, -100)
   , sector      = sector
   , direction   = 0
   , dimensions  = (20, 20)
@@ -91,6 +91,48 @@ playersShip =
       , { type' = FrontRight, firing = 0 }
       , { type' = SideLeft,   firing = 0 }
       , { type' = SideRight,  firing = 0 }
+      , { type' = BackLeft,   firing = 0 }
+      , { type' = BackRight,  firing = 0 }
+      ]
+    }
+  , sprite =
+    { src        = "ship/ship"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  }
+
+player2 : SpaceObject
+player2 =
+  let
+    gx = 44950
+    gy = 60000
+
+    sector = 
+      (floor (gx / 600), floor (gy / 600))
+  in
+  { angle       = (90, 0)
+  , local       = (gx, gy)
+  , global      = (gx, gy)
+  , velocity    = (10, -100)
+  , sector      = sector
+  , direction   = 0
+  , dimensions  = (34, 29)
+  , fuel        = 505.1
+  , air         = 63
+  , mass        = 852
+  , onCollision = OnCollision (\s -> s)
+  , name        = "Frege"
+  , uuid        = "03"
+  , engine      =
+    { boost     = True
+    , thrusters = 
+      [ { type' = Main,       firing = 0 }
+      , { type' = FrontLeft,  firing = 0 }
+      , { type' = FrontRight, firing = 0 }
+      , { type' = SideLeft,   firing = 1 }
+      , { type' = SideRight,  firing = 1 }
       , { type' = BackLeft,   firing = 0 }
       , { type' = BackRight,  firing = 0 }
       ]
