@@ -70,7 +70,7 @@ playersShip =
     sector = 
       (floor (gx / 600), floor (gy / 600))
   in
-  { angle       = (10, -10)
+  { angle       = (0, 0)
   , local       = (gx, gy)
   , global      = (gx, gy)
   , velocity    = (10, -100)
@@ -112,7 +112,7 @@ player2 =
     sector = 
       (floor (gx / 600), floor (gy / 600))
   in
-  { angle       = (90, 0)
+  { angle       = (100, -1)
   , local       = (gx, gy)
   , global      = (gx, gy)
   , velocity    = (10, -100)
@@ -123,18 +123,18 @@ player2 =
   , air         = 63
   , mass        = 852
   , onCollision = OnCollision (\s -> s)
-  , name        = "Frege"
+  , name        = "Russell"
   , uuid        = "03"
   , engine      =
-    { boost     = True
+    { boost     = False
     , thrusters = 
       [ { type' = Main,       firing = 0 }
       , { type' = FrontLeft,  firing = 0 }
       , { type' = FrontRight, firing = 0 }
-      , { type' = SideLeft,   firing = 1 }
-      , { type' = SideRight,  firing = 1 }
-      , { type' = BackLeft,   firing = 0 }
-      , { type' = BackRight,  firing = 0 }
+      , { type' = SideLeft,   firing = 0 }
+      , { type' = SideRight,  firing = 0 }
+      , { type' = BackLeft,   firing = 1 }
+      , { type' = BackRight,  firing = 1 }
       ]
     }
   , sprite =

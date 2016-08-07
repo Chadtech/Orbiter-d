@@ -1,25 +1,8 @@
-module UpdateObjects exposing (updateObjects)
+module SetPosition exposing (setPosition)
 
 import Types       exposing (..)
 import SpaceObject exposing (SpaceObject, SpaceObjects)
-import Dict        exposing (fromList, toList, Dict)
 import List        exposing (map)
-
-updateObjects : Time -> Dict String SpaceObject -> Dict String SpaceObject
-updateObjects dt objects =
-  toList objects
-  |>map snd
-  |>map (update dt)
-  |>map pairWithuuid
-  |>fromList
-
-update : Time -> SpaceObject -> SpaceObject
-update dt =
-  setPosition dt
-
-pairWithuuid : SpaceObject -> (String, SpaceObject)
-pairWithuuid object =
-  (object.uuid, object)
 
 setPosition : Time -> SpaceObject -> SpaceObject
 setPosition dt object =
@@ -47,7 +30,6 @@ modulo : Float -> Float
 modulo f =
   let f' = floor f in
   (toFloat (f' % 600)) + (f - (toFloat f'))
-
 
 moduloAngle : Angle -> Angle
 moduloAngle a =

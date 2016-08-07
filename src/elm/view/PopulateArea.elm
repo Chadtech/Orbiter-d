@@ -40,17 +40,10 @@ adjustPosition (gx, gy) (lx, ly) object =
 
 draw : (Coordinate, SpaceObject) -> Form
 draw (position, object) =
-  let
-    {angle, sprite} = object
-    (w,h) = sprite.dimensions
-    a     = fst angle
-  in
-    --root sprite.src
-    --|>image w h
-    --|>toForm
-    RenderObject.draw object
-    |>move position
-    |>rotate (degrees a)
+  let a = fst object.angle in
+  RenderObject.draw object
+  |>move position
+  |>rotate (degrees a)
 
 layerer : List Form -> Form
 layerer = toForm << collage 1200 1200

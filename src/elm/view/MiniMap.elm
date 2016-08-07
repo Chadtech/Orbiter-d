@@ -32,7 +32,6 @@ miniMap {global} objects =
     |>toHtml
   ]
 
--- position in map 
 position : Coordinate -> Coordinate
 position (x,y) =
   ((x * 0.00185) - 111, (y * 0.00185) - 111)
