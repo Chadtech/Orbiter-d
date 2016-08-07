@@ -10,6 +10,7 @@ import List             exposing (filter, map)
 import Pather           exposing (root)
 import Types            exposing (..)
 import SpaceObject      exposing (..)
+import RenderObject     exposing (draw)
 import PopulateArea     exposing (populateArea)
 
 gameScope : Player -> SpaceObjects -> Html Msg
@@ -21,7 +22,7 @@ gameScope player objects =
       |>backdropGalaxy player
       |>backdropStars  player
       |>rotateArea     player
-    , drawPlayer     player
+    , draw     player
     ]
   ]
   |>collage 600 600 >> toHtml

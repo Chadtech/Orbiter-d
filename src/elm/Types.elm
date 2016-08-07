@@ -8,6 +8,7 @@ type alias Coordinate = (Float, Float)
 type alias Sector     = (Int, Int)
 type alias Dimensions = (Int, Int)
 type alias UUID       = String
+type alias Boost      = Bool
 
 type Msg 
   = Refresh Time
@@ -15,6 +16,7 @@ type Msg
 
 type alias Sprite =
   { dimensions : Dimensions
+  , area       : Dimensions
   , src        : String
   , position   : (Int, Int)
   }

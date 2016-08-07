@@ -56,6 +56,7 @@ o2Box =
   , sprite =
     { src        = "stuff/oxygen-tank"
     , dimensions = (20, 20)
+    , area       = (20, 20)
     , position   = (0,0)
     }
   }
@@ -97,6 +98,7 @@ playersShip =
   , sprite =
     { src        = "ship/ship"
     , dimensions = (47, 47)
+    , area       = (138, 138)
     , position   = (0,0)
     }
   }
@@ -130,6 +132,7 @@ dummyShip =
   , sprite =
     { src        = "ship/ship"
     , dimensions = (47, 47)
+    , area       = (138, 138)
     , position   = (0,0)
     }
   }
