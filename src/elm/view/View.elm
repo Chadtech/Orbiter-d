@@ -4,7 +4,7 @@ import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Game             exposing (Model)
-import SpaceObject      exposing (dummyShip, SpaceObject)
+import SpaceObject      exposing (dummyShip, SpaceObject, SpaceObjects, Player)
 import Types            exposing (..)
 import KeyDiagram       exposing (keyDiagram, keyExample)
 import Instructions     exposing (instructions)
@@ -12,35 +12,13 @@ import MiniMap          exposing (miniMap)
 import ReadOut          exposing (readOut)
 import GameScope        exposing (gameScope)
 import Components       exposing (veryIgnorablePoint)
-import Dict             exposing (get, toList)
+import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
 import List             exposing (filter, append, map)
 
-isntPlayer : String -> (String, SpaceObject) -> Bool
-isntPlayer uuid (uuid', object) =
-  uuid' /= uuid
-
 view : Model -> Html Msg
 view model =
-  let
-    {localObjects, remoteObjects, playerId} = model
-
-    player =
-      get playerId localObjects
-      |>withDefault dummyShip
-
-    objects =
-      let
-        localsMinusPlayer =
-          localObjects
-          |>toList
-          |>filter (isntPlayer playerId)
-          |>map snd
-      in
-        append localsMinusPlayer
-        <|map snd
-        <|toList remoteObjects
-  in
+  let (player, objects) = isolatePlayer model in
   div
   [ class "root" ]
   [ veryIgnorablePoint "Game : Orbiter D"
@@ -62,3 +40,33 @@ view model =
       ]
     ]
   ]
+
+isntPlayer : UUID -> SpaceObject -> Bool
+isntPlayer uuid' {uuid} = uuid' /= uuid
+
+justObjects : Dict String SpaceObject -> SpaceObjects
+justObjects objects = map snd <| toList objects
+
+isolatePlayer : Model -> (Player, SpaceObjects)
+isolatePlayer model =
+  let
+    {localObjects, remoteObjects, playerId} = model
+
+    player =
+      get playerId localObjects
+      |>withDefault dummyShip
+
+    objects =
+      localObjects
+      |>justObjects
+      |>filter (isntPlayer playerId)
+      |>append (justObjects remoteObjects)
+      
+  in (player, objects)
+
+
+
+
+
+
+

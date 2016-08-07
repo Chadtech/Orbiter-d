@@ -7,6 +7,7 @@ type alias Angle      = Float
 type alias Coordinate = (Float, Float)
 type alias Sector     = (Int, Int)
 type alias Dimensions = (Int, Int)
+type alias UUID       = String
 
 type Msg 
   = Refresh Time
