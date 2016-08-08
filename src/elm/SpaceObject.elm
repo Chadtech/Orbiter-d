@@ -39,7 +39,7 @@ o2Box =
   { angle       = (10, -10)
   , local       = (gx, gy)
   , global      = (gx, gy)
-  , velocity    = (15, -100)
+  , velocity    = (15, -420)
   , sector      = sector
   , direction   = 0
   , dimensions  = (20, 20)
@@ -73,7 +73,7 @@ playersShip =
   { angle       = (0, 0)
   , local       = (gx, gy)
   , global      = (gx, gy)
-  , velocity    = (10, -100)
+  , velocity    = (10, -400)
   , sector      = sector
   , direction   = 0
   , dimensions  = (34, 29)
@@ -112,10 +112,10 @@ player2 =
     sector = 
       (floor (gx / 600), floor (gy / 600))
   in
-  { angle       = (100, -1)
+  { angle       = (0, 0)
   , local       = (gx, gy)
   , global      = (gx, gy)
-  , velocity    = (10, -100)
+  , velocity    = (10, -400)
   , sector      = sector
   , direction   = 0
   , dimensions  = (34, 29)
@@ -134,7 +134,7 @@ player2 =
       , { type' = SideLeft,   firing = 0 }
       , { type' = SideRight,  firing = 0 }
       , { type' = BackLeft,   firing = 1 }
-      , { type' = BackRight,  firing = 1 }
+      , { type' = BackRight,  firing = 0 }
       ]
     }
   , sprite =

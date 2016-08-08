@@ -11,6 +11,8 @@ import Instructions     exposing (instructions)
 import MiniMap          exposing (miniMap)
 import ReadOut          exposing (readOut)
 import GameScope        exposing (gameScope)
+import NavMarkers       exposing (navMarkers)
+import VelocityGauge    exposing (velocityGauge)
 import Components       exposing (veryIgnorablePoint)
 import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
@@ -32,11 +34,14 @@ view model =
       ]
     , div
       [ class "game-view" ]
-      [ gameScope player objects ]
+      [ gameScope player objects 
+      , navMarkers player objects
+      , velocityGauge player
+      ]
     , div
       [ class "right-hud" ]
       [ miniMap player objects
-      , readOut  
+      , readOut player
       ]
     ]
   ]

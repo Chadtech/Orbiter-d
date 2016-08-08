@@ -31,17 +31,19 @@ setEngine keys player =
   { player
   | engine =
     { thrusters =
-        map (setThruster keys) engine.thrusters
+        map (setThruster (player.fuel > 0) keys) engine.thrusters
     , boost = isPressed Keyboard.Shift keys 
     }
   }
 
-setThruster : Keyboard.Model -> Thruster -> Thruster
-setThruster keys thruster =
-  if isPressed (thrustersKey thruster) keys  then
-    { thruster | firing = 1 }
+setThruster : Bool -> Keyboard.Model -> Thruster -> Thruster
+setThruster enoughFuel keys thruster =
+  let keyIsPressed = isPressed (thrustersKey thruster) keys in
+  if not enoughFuel then { thruster | firing = 0 }
   else
-    { thruster | firing = 0 }
+    if keyIsPressed then { thruster | firing = 1 }
+    else { thruster | firing = 0 }
+
 
 thrustersKey : Thruster -> Keyboard.Key
 thrustersKey {type'} =

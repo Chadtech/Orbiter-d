@@ -20,10 +20,11 @@ setPosition dt object =
     a' = a + (dt * va)
   in
   { object 
-  | local  = (modulo x', modulo y')
-  , global = (x', y')
-  , angle  = (moduloAngle a', va)
-  , sector = (getSector x', getSector y')
+  | local     = (modulo x', modulo y')
+  , global    = (x', y')
+  , angle     = (moduloAngle a', va)
+  , sector    = (getSector x', getSector y')
+  , direction = atan2 vx vy
   }
 
 modulo : Float -> Float

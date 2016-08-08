@@ -103,5 +103,3 @@ image' : Int -> Int -> String -> Form
 image' w h src = 
   root src |> image w h |> toForm
 
-  --p [ class "point" ] [ Html.text "COOOOLLL" ]
-

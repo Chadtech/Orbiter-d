@@ -8,30 +8,30 @@ import List        exposing (map, foldr, filter)
 setThrust: SpaceObject -> SpaceObject
 setThrust object =
   let
-    {velocity, engine, angle} = object
+    {velocity, engine, angle, mass} = object
     {boost, thrusters} = engine
-    (a, va) = angle
-    --weightFactor = object.weight / 1528
+    (a, va)            = angle
+    massFactor         = mass / 1528
 
     firingThrusters =
       filter isFiring thrusters
 
-    va' =
-      firingThrusters
-      |>map (calculateAngularThrust boost)
-      |>foldr (+) va
+    calculateThrust' =
+      calculateThrust boost a massFactor
 
-    --angle' =
-    --  foldr
-    --    calculateAngle
-    --    object.angle
+    calculateAngularThrust' =
+      calculateAngularThrust boost massFactor
   in
   { object
   | velocity = 
       firingThrusters
-      |>map (calculateThrust boost a)
+      |>map calculateThrust'
       |>foldr sumTuple velocity
-  , angle = (a, va')
+  , angle =
+      firingThrusters
+      |>map calculateAngularThrust'
+      |>foldr (+) va
+      |>(,) a
   }
 
 isFiring : Thruster -> Bool
@@ -45,37 +45,42 @@ calculateBoost boost (vx, vy) =
   if boost then (vx * 5, vy * 5)
   else (vx, vy)
 
-calculateThrust : Boost -> Angle -> Thruster -> Coordinate
-calculateThrust boost angle {type'} =
+calculateThrust : Boost -> Angle -> Float -> Thruster -> Coordinate
+calculateThrust boost angle massFactor {type'} =
   let
     attenuation = 
-      if boost then 5 * power
-      else power
+      if boost then 5 * power / massFactor
+      else power / massFactor
 
     dvx =
       case type' of
         Main        -> -mainsPower * (sin' angle)
         FrontLeft   -> sin' angle
         FrontRight  -> sin' angle
-
-        _ -> 0
+        SideLeft    -> -(cos' angle)
+        SideRight   -> cos' angle
+        BackLeft    -> -(sin' angle)
+        BackRight   -> -(sin' angle)
 
     dvy =
       case type' of
         Main       -> mainsPower * (cos' angle)
         FrontLeft  -> -(cos' angle)
         FrontRight -> -(cos' angle)
-
-
-        _ -> 0
+        SideLeft   -> -(sin' angle)
+        SideRight  -> sin' angle
+        BackLeft   -> cos' angle
+        BackRight  -> cos' angle
 
   in (dvx * attenuation, dvy * attenuation)
 
-calculateAngularThrust : Boost -> Thruster -> Float
-calculateAngularThrust boost {type'} =
+calculateAngularThrust : Boost -> Float -> Thruster -> Float
+calculateAngularThrust boost massFactor {type'} =
   case type' of
-    FrontLeft  -> rotatePower
-    FrontRight -> -rotatePower
+    FrontLeft  -> rotatePower  / massFactor
+    FrontRight -> -rotatePower / massFactor
+    BackLeft   -> -rotatePower / massFactor
+    BackRight  -> rotatePower  / massFactor
     _ -> 0
 
 
