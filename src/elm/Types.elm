@@ -1,6 +1,7 @@
 module Types exposing (..)
 
-import Keyboard.Extra   as Keyboard
+import Keyboard.Extra as Keyboard
+import Time
 
 type alias Time       = Float
 type alias Angle      = Float
@@ -13,6 +14,7 @@ type alias Boost      = Bool
 type Msg 
   = Refresh Time
   | HandleKeys Keyboard.Msg
+  | PopulateFromRandomness Time.Time
 
 type alias Sprite =
   { dimensions : Dimensions

@@ -3,6 +3,9 @@ module Game exposing (..)
 import Keyboard.Extra   as Keyboard
 import SpaceObject exposing (SpaceObject, SpaceObjects, playersShip, player2, o2Box)
 import Dict exposing (Dict, fromList)
+import Time exposing (Time, now)
+import Task
+import Debug exposing (log)
 
 type alias Model =
   { localObjects  : Dict String SpaceObject
@@ -12,6 +15,7 @@ type alias Model =
   , playerId      : String
   , died          : Bool
   , deathMessage  : String
+  , ready         : Bool
   }
 
 init : Model
@@ -23,6 +27,7 @@ init =
   , playerId      = "40"
   , died          = False
   , deathMessage  = ""
+  , ready         = False
   }
 
 

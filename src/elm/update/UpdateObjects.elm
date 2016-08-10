@@ -2,7 +2,7 @@ module UpdateObjects exposing (updateObjects)
 
 import Types       exposing (..)
 import SpaceObject exposing (SpaceObject, SpaceObjects)
-import Dict        exposing (fromList, toList, Dict)
+import Dict        exposing (fromList, values, Dict)
 import List        exposing (map)
 import SetPosition exposing (setPosition)
 import SetThrust   exposing (setThrust)
@@ -12,8 +12,7 @@ import Consumption exposing (consumeAir, consumeFuel)
 
 updateObjects : Time -> Dict String SpaceObject -> Dict String SpaceObject
 updateObjects dt objects =
-  toList objects
-  |>map snd
+  values objects
   |>map (update dt)
   |>map pairWithuuid
   |>fromList
@@ -26,8 +25,6 @@ update dt =
   >>setThrust
   >>setGravity dt
   >>setPosition dt
-
-
 
 pairWithuuid : SpaceObject -> (String, SpaceObject)
 pairWithuuid object =

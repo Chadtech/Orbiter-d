@@ -9,6 +9,11 @@ import HandleKeys       exposing (handleKeys)
 import View             exposing (view)
 import UpdateObjects    exposing (updateObjects)
 import Dict             exposing (toList)
+import CollisionHandle  exposing (collisionsHandle)
+import Time exposing (inMilliseconds)
+import Random exposing (initialSeed)
+import Debug exposing (log)
+import List
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -23,10 +28,13 @@ main =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.batch
-  [ Sub.map HandleKeys Keyboard.subscriptions
-  , diffs Refresh
-  ]
+  if model.ready then
+    Sub.batch
+    [ Sub.map HandleKeys Keyboard.subscriptions
+    , diffs Refresh
+    ]
+  else 
+    times PopulateFromRandomness
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -38,10 +46,13 @@ update msg model =
           let
             {localObjects, remoteObjects} = model
             dt' = rate dt
+
+            (localObjects', remoteObjects') = 
+              collisionsHandle dt' model
           in
           { model
-          | localObjects  = updateObjects dt' localObjects
-          , remoteObjects = updateObjects dt' remoteObjects
+          | localObjects  = updateObjects dt' localObjects'
+          , remoteObjects = updateObjects dt' remoteObjects'
           }
       in
       (model', Cmd.none)
@@ -52,3 +63,9 @@ update msg model =
           Keyboard.update keyMsg model.keys
       in
         (handleKeys model keys, Cmd.map HandleKeys kCmd)
+
+    PopulateFromRandomness time ->
+      --let what = log "WhAT" <| initialSeed <| floor <| inMilliseconds time in
+      ({model | ready = True }, Cmd.none)
+
+

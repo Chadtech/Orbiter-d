@@ -2,12 +2,21 @@ module SpaceObject exposing (..)
 
 import Types exposing (..)
 import Engine exposing (..)
+import Dict exposing (Dict)
 
 type alias SpaceObjects = List SpaceObject
+type alias SpaceObjectDict = Dict String SpaceObject
 type alias Player = SpaceObject
 
 type OnCollision = 
   OnCollision (SpaceObject -> SpaceObject)
+
+type SpaceObjectType 
+  = Craft
+  | AirTank
+  | FuelTank
+  | Missile
+  | Debris
 
 type alias SpaceObject =
   { local       : Coordinate
@@ -17,13 +26,14 @@ type alias SpaceObject =
   , direction   : Float
   , sector      : Sector
   , dimensions  : Dimensions
-  , onCollision : OnCollision
+  , type'       : SpaceObjectType
   , sprite      : Sprite
   , fuel        : Float
   , air         : Float
   , mass        : Float
   , name        : String
-  , uuid        : String
+  , owner       : UUID
+  , uuid        : UUID
   , engine      : Engine
   }
 
@@ -46,9 +56,10 @@ o2Box =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
-  , onCollision = OnCollision (\s -> s)
+  , type'       = AirTank
   , name        = "air box"
   , uuid        = "12"
+  , owner       = "40"
   , engine      =
     { boost     = False
     , thrusters = []
@@ -80,9 +91,10 @@ playersShip =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
-  , onCollision = OnCollision (\s -> s)
+  , type'       = Craft
   , name        = "Frege"
   , uuid        = "40"
+  , owner       = "40"
   , engine      =
     { boost     = False
     , thrusters = 
@@ -112,7 +124,7 @@ player2 =
     sector = 
       (floor (gx / 600), floor (gy / 600))
   in
-  { angle       = (0, 0)
+  { angle       = (0, -5)
   , local       = (gx, gy)
   , global      = (gx, gy)
   , velocity    = (10, -400)
@@ -122,18 +134,19 @@ player2 =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
-  , onCollision = OnCollision (\s -> s)
+  , type'       = Craft
   , name        = "Russell"
   , uuid        = "03"
+  , owner       = "40"
   , engine      =
     { boost     = False
     , thrusters = 
-      [ { type' = Main,       firing = 0 }
+      [ { type' = Main,       firing = 1 }
       , { type' = FrontLeft,  firing = 0 }
       , { type' = FrontRight, firing = 0 }
       , { type' = SideLeft,   firing = 0 }
       , { type' = SideRight,  firing = 0 }
-      , { type' = BackLeft,   firing = 1 }
+      , { type' = BackLeft,   firing = 0 }
       , { type' = BackRight,  firing = 0 }
       ]
     }
@@ -164,9 +177,10 @@ dummyShip =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
-  , onCollision = OnCollision (\s -> s)
+  , type'       = Craft
   , name        = "dummy"
   , uuid        = "21"
+  , owner       = "40"
   , engine      =
     { boost     = False
     , thrusters = []
