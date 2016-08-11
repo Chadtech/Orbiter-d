@@ -129,16 +129,16 @@ applyCollisions dt playersId objects =
       map (didCollide dt player) objects
 
     collidedObjects =
-      filter fst collisionsCheck
-      |>map snd
+      filter fst collisionsCheck |> map snd
 
     player' =
-      foldr
-        onCollision
-        player
-        collidedObjects
+      foldr onCollision player collidedObjects
   in
-    insertPlayer player' objects
+    player :: (map markRemove collidedObjects)
+    |>foldr insertObject objects
+
+markRemove : SpaceObject -> SpaceObject
+markRemove object = { object | remove = True }
 
 getPlayer : UUID -> SpaceObjects -> Player
 getPlayer uuid objects =
@@ -148,22 +148,27 @@ getPlayer uuid objects =
   |>get uuid
   |>withDefault dummyShip
 
-insertPlayer : Player -> SpaceObjects -> SpaceObjects
-insertPlayer player =
-  let {uuid} = player in
-  map bundle >> fromList >> insert uuid player >> values
+insertObject : SpaceObject -> SpaceObjects -> SpaceObjects
+insertObject object =
+  let {uuid} = object in
+  map bundle >> fromList >> insert uuid object >> values
 
 bundle : SpaceObject -> (UUID, SpaceObject)
 bundle object = (object.uuid, object)
 
 onCollision : SpaceObject -> Player -> Player
-onCollision object player = log "COLLIDED" player
+onCollision object player = 
+  case object.type' of
+    AirTank ->
+      { player | air = player.air + 150 }
 
-collisionsHandle : Time -> Model -> (SpaceObjectDict, SpaceObjectDict)
-collisionsHandle dt {playerId, localObjects, remoteObjects} =
+    _ -> player
+
+collisionsHandle : Time -> Model -> Model
+collisionsHandle dt model =
   let
     objects = 
-      union localObjects remoteObjects
+      union model.localObjects model.remoteObjects
       |>values
 
     craft =
@@ -172,21 +177,21 @@ collisionsHandle dt {playerId, localObjects, remoteObjects} =
       |>map .uuid
 
     objects' =
-      foldr
-        (applyCollisions dt)
-        objects
-        craft
+      foldr (applyCollisions dt) objects craft
+      |>filter (.remove >> not)
+
+    isLocal' = 
+      isLocal model.playerId
 
   in
-    (,)
-      (ltd <| filter (isLocal playerId) objects')
-      (ltd <| filter ((isLocal playerId) >> not) objects')
+    { model
+    | localObjects = dictOutput isLocal' objects'
+    , remoteObjects = dictOutput (isLocal' >> not) objects' 
+    }
 
-    --(localObjects, remoteObjects)
-ltd : SpaceObjects -> SpaceObjectDict
-ltd objects =
-  map bundle objects |> fromList
-
+dictOutput : (SpaceObject -> Bool) -> SpaceObjects ->  SpaceObjectDict
+dictOutput filter' objects =
+  fromList <| map bundle <| filter filter' objects
 
 isLocal : UUID -> SpaceObject -> Bool
 isLocal playersId object =

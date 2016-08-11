@@ -35,6 +35,7 @@ type alias SpaceObject =
   , owner       : UUID
   , uuid        : UUID
   , engine      : Engine
+  , remove      : Bool
   }
 
 o2Box : SpaceObject
@@ -70,6 +71,7 @@ o2Box =
     , area       = (20, 20)
     , position   = (0,0)
     }
+  , remove      = False
   }
 
 playersShip : SpaceObject
@@ -113,6 +115,8 @@ playersShip =
     , area       = (138, 138)
     , position   = (0,0)
     }
+  , remove      = False
+
   }
 
 player2 : SpaceObject
@@ -124,7 +128,7 @@ player2 =
     sector = 
       (floor (gx / 600), floor (gy / 600))
   in
-  { angle       = (0, -5)
+  { angle       = (0, 0)
   , local       = (gx, gy)
   , global      = (gx, gy)
   , velocity    = (10, -400)
@@ -141,8 +145,8 @@ player2 =
   , engine      =
     { boost     = False
     , thrusters = 
-      [ { type' = Main,       firing = 1 }
-      , { type' = FrontLeft,  firing = 0 }
+      [ { type' = Main,       firing = 0 }
+      , { type' = FrontLeft,  firing = 1 }
       , { type' = FrontRight, firing = 0 }
       , { type' = SideLeft,   firing = 0 }
       , { type' = SideRight,  firing = 0 }
@@ -156,6 +160,7 @@ player2 =
     , area       = (138, 138)
     , position   = (0,0)
     }
+  , remove      = False
   }
 
 dummyShip : SpaceObject
@@ -191,4 +196,5 @@ dummyShip =
     , area       = (138, 138)
     , position   = (0,0)
     }
+  , remove      = False
   }

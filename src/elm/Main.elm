@@ -10,9 +10,9 @@ import View             exposing (view)
 import UpdateObjects    exposing (updateObjects)
 import Dict             exposing (toList)
 import CollisionHandle  exposing (collisionsHandle)
-import Time exposing (inMilliseconds)
-import Random exposing (initialSeed)
-import Debug exposing (log)
+import Time             exposing (inMilliseconds)
+import Random           exposing (initialSeed)
+import Init             exposing (init)
 import List
 
 rate : Time -> Time
@@ -27,8 +27,8 @@ main =
   }
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
-  if model.ready then
+subscriptions {ready} =
+  if ready then
     Sub.batch
     [ Sub.map HandleKeys Keyboard.subscriptions
     , diffs Refresh
@@ -42,17 +42,15 @@ update msg model =
 
     Refresh dt ->
       let
+        dt'    = rate dt
         model' =
           let
-            {localObjects, remoteObjects} = model
-            dt' = rate dt
-
-            (localObjects', remoteObjects') = 
+            {localObjects, remoteObjects} = 
               collisionsHandle dt' model
           in
           { model
-          | localObjects  = updateObjects dt' localObjects'
-          , remoteObjects = updateObjects dt' remoteObjects'
+          | localObjects  = updateObjects dt' localObjects
+          , remoteObjects = updateObjects dt' remoteObjects
           }
       in
       (model', Cmd.none)
@@ -65,7 +63,10 @@ update msg model =
         (handleKeys model keys, Cmd.map HandleKeys kCmd)
 
     PopulateFromRandomness time ->
-      --let what = log "WhAT" <| initialSeed <| floor <| inMilliseconds time in
-      ({model | ready = True }, Cmd.none)
+      (init model (initialSeed (floor time)), Cmd.none)
+
+
+getInt : Random.Generator Int
+getInt = Random.int 5000 11500
 
 
