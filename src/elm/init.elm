@@ -52,7 +52,7 @@ initLocalObjects seed uuid =
       foldr 
         (always (addSpaceObject uuid AirTank)) 
         ([], seed') 
-        [0..9]
+        [0..10]
   in
     player :: objects
     |>map bundle
@@ -130,25 +130,29 @@ addSpaceObject owner type' (objects, seed) =
       let (x, y) = fromPolar (r, degrees angle) in
       (x + 60000, y + 60000)
 
+    (v', seedee) = getFloat -7 7 seede'
+
+    velocity =
+      fromPolar ((600 / (sqrt (r / 7000))), (degrees angle) + (pi / 2))
     --clockwiseOrbit = (getFloat seed 0 1) > 0.5
 
     sector =
       let (x, y) = cartesianCoordinates in
       (floor (x / 600), floor (y / 600))
 
-    (uuid, seede'') = makeUUID seede'
+    (uuid, seede'') = makeUUID seedee
 
   in
     ({ angle    = (0, va)
     , global   = cartesianCoordinates
     , local    = cartesianCoordinates
-    , velocity = (0, 0)
+    , velocity = velocity
     , sector   = sector
     , direction = 0
     , dimensions =
         case type' of
           AirTank -> (20, 20)
-          _ -> (400, 10)
+          _       -> (400, 10)
     , fuel     = 0
     , air      = 0
     , mass     = 1
@@ -156,7 +160,7 @@ addSpaceObject owner type' (objects, seed) =
     , name     = 
         case type' of
           AirTank -> "air tank"
-          _ -> "Henry"
+          _       -> "Henry"
     , uuid    = uuid
     , owner   = owner
     , engine  = 
