@@ -8,12 +8,16 @@ import Types            exposing (..)
 import HandleKeys       exposing (handleKeys)
 import View             exposing (view)
 import UpdateObjects    exposing (updateObjects)
+import SetPlayersName   exposing (setPlayersName)
 import Dict             exposing (toList)
 import CollisionHandle  exposing (collisionsHandle)
 import Time             exposing (inMilliseconds)
 import Random           exposing (initialSeed)
 import Init             exposing (init)
 import List
+import String           exposing (length, slice)
+import HandleMessageSubmit exposing (handleMessageSubmit)
+import Debug exposing (log)
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -65,8 +69,34 @@ update msg model =
     PopulateFromRandomness time ->
       (init model (initialSeed (floor time)), Cmd.none)
 
+    UpdateName string ->
+      (setPlayersName string model, Cmd.none)
 
-getInt : Random.Generator Int
-getInt = Random.int 5000 11500
+    CheckForEnter code ->
+      if code == 13 then
+        (handleMessageSubmit model, Cmd.none)
+      else (model, Cmd.none)
+
+    UpdateChatInput string ->
+      let 
+        l = length string 
+
+        isntEnter =
+          slice (l - 1) l string /= "\n"
+      in
+      if isntEnter then
+        if l < 45 then
+          ({model | chatInput = string}, Cmd.none)
+        else 
+          (model, Cmd.none)
+      else (model, Cmd.none)
+
+
+
+
+
+
+
+
 
 

@@ -134,7 +134,7 @@ applyCollisions dt playersId objects =
     player' =
       foldr onCollision player collidedObjects
   in
-    player :: (map markRemove collidedObjects)
+    player' :: (map markRemove collidedObjects)
     |>foldr insertObject objects
 
 markRemove : SpaceObject -> SpaceObject
@@ -161,6 +161,8 @@ onCollision object player =
   case object.type' of
     AirTank ->
       { player | air = player.air + 150 }
+    FuelTank ->
+      { player | fuel = player.fuel + 762.2}
 
     _ -> player
 

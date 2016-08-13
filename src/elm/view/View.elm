@@ -13,6 +13,7 @@ import ReadOut          exposing (readOut)
 import GameScope        exposing (gameScope)
 import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
+import ChatRoom         exposing (chatroom)
 import Components       exposing (veryIgnorablePoint)
 import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
@@ -28,10 +29,11 @@ view model =
     [ class "main" ]
     [ div
       [ class "left-hud" ]
-      [ keyDiagram 
-      , instructions
+      [ instructions
+      , keyDiagram
       , keyExample
       ]
+    , chatroom model player
     , div
       [ class "game-view" ]
       [ gameScope player objects 
@@ -45,6 +47,8 @@ view model =
       ]
     ]
   ]
+
+
 
 isntPlayer : UUID -> SpaceObject -> Bool
 isntPlayer uuid' {uuid} = uuid' /= uuid

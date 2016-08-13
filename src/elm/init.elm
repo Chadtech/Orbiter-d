@@ -40,6 +40,9 @@ randomNames =
   , "Newhaus"
   , "Wolfe"
   , "Hess"
+  , "Holmes"
+  , "Jackson"
+  , "Roberts"
   ]
 
 initLocalObjects : Seed -> UUID -> SpaceObjectDict
@@ -50,9 +53,9 @@ initLocalObjects seed uuid =
 
     (objects, seed'') =
       foldr 
-        (always (addSpaceObject uuid AirTank)) 
+        (always (addSpaceObject uuid)) 
         ([], seed') 
-        [0..10]
+        [0..15]
   in
     player :: objects
     |>map bundle
@@ -64,17 +67,44 @@ bundle object = (object.uuid, object)
 makePlayer : Seed -> UUID -> (Player, Seed)
 makePlayer seed uuid =
   let
-    gx = 44850
-    gy = 60000
+    r     = getFloat 7000 55000 seed
+    angle = getFloat 0 359 (snd r)
+    va    = getFloat -70 70 (snd angle)
+
+    cartesianCoordinates =
+      let (x, y) = fromPolar ((fst r), degrees (fst angle)) in
+      (x + 60000, y + 60000)
+
+    vx' = getFloat -70 70 (snd va)
+    vy' = getFloat -70 70 (snd vx')
+
+    --gx = getFloat 7000 55000 seed
+    --gy = getFloat 7000 55000 (snd gx)
+
+    clockwiseOrbit = 
+      (fst (getFloat 0 1 (snd vy'))) > 0.5
+
+    (vx, vy) =
+      let 
+        r' = 
+          if clockwiseOrbit then
+            (600 / (sqrt ((fst r) / 7000)))
+          else
+            (600 / -(sqrt ((fst r) / 7000)))
+
+        angle' = (degrees (fst angle)) + (pi / 2)
+      in
+      fromPolar (r', angle')
 
     sector = 
-      (floor (gx / 600), floor (gy / 600))
+      let (x, y) = cartesianCoordinates in
+      (floor (x / 600), floor (y / 600))
 
     (seed', playersName) =
       let 
         length' = length randomNames 
         (nameIndex, seed') =
-          getFloat 0 (toFloat length') seed 
+          getFloat 0 (toFloat length') (snd vy')
       in
         map2 (,) [ 0..length' ] randomNames
         |>fromList
@@ -84,17 +114,17 @@ makePlayer seed uuid =
   in
   (,)
   { angle       = (0, 0)
-  , local       = (gx, gy)
-  , global      = (gx, gy)
-  , velocity    = (10, -400)
+  , local       = cartesianCoordinates
+  , global      = cartesianCoordinates
+  , velocity    = (vx + (fst vx'), (vy + (fst vy')) )
   , sector      = sector
   , direction   = 0
   , dimensions  = (34, 29)
-  , fuel        = 505.1
-  , air         = 63
+  , fuel        = 1010.2
+  , air         = 159
   , mass        = 852
   , type'       = Craft
-  , name        = log "NAME!" playersName
+  , name        = playersName
   , uuid        = uuid
   , owner       = uuid
   , engine      =
@@ -119,47 +149,73 @@ makePlayer seed uuid =
   }
   seed'
 
-addSpaceObject : UUID -> SpaceObjectType -> (SpaceObjects, Seed) -> (SpaceObjects, Seed)
-addSpaceObject owner type' (objects, seed) =
+addSpaceObject : UUID -> (SpaceObjects, Seed) -> (SpaceObjects, Seed)
+addSpaceObject owner (objects, seed) =
   let
-    (r, seed')      = getFloat 7000 55000 seed
-    (angle, seed'') = getFloat 0 359 seed'
-    (va, seede' )   = getFloat -70 70 seed''
+    r     = getFloat 7000 55000 seed
+    angle = getFloat 0 359 (snd r)
+    va    = getFloat -70 70 (snd angle)
 
     cartesianCoordinates =
-      let (x, y) = fromPolar (r, degrees angle) in
+      let (x, y) = fromPolar ((fst r), degrees (fst angle)) in
       (x + 60000, y + 60000)
 
-    (v', seedee) = getFloat -7 7 seede'
+    vx' = getFloat -70 70 (snd va)
+    vy' = getFloat -70 70 (snd vx')
 
-    velocity =
-      fromPolar ((600 / (sqrt (r / 7000))), (degrees angle) + (pi / 2))
-    --clockwiseOrbit = (getFloat seed 0 1) > 0.5
+    clockwiseOrbit = 
+      (fst (getFloat 0 1 (snd vy'))) > 0.5
+
+    (vx, vy) =
+      let 
+        r' = 
+          if clockwiseOrbit then
+            (600 / (sqrt ((fst r) / 7000)))
+          else
+            (600 / -(sqrt ((fst r) / 7000)))
+
+        angle' = (degrees (fst angle)) + (pi / 2)
+      in
+      fromPolar (r', angle')
+
+
 
     sector =
       let (x, y) = cartesianCoordinates in
       (floor (x / 600), floor (y / 600))
 
-    (uuid, seede'') = makeUUID seedee
+    uuid' = makeUUID (snd vy')
+    uuid  = fst uuid'
+
+    (type', seed') = getFloat 0 1 (snd uuid')
+
+    type'' = 
+      if type' > 0.5 then AirTank
+      else FuelTank
+
 
   in
-    ({ angle    = (0, va)
+    (,)
+    (
+    { angle    = (0, (fst va))
     , global   = cartesianCoordinates
     , local    = cartesianCoordinates
-    , velocity = velocity
+    , velocity    = (vx + (fst vx'), (vy + (fst vy')) )
     , sector   = sector
     , direction = 0
     , dimensions =
-        case type' of
+        case type'' of
           AirTank -> (20, 20)
+          FuelTank -> (10, 20)
           _       -> (400, 10)
     , fuel     = 0
     , air      = 0
     , mass     = 1
-    , type'    = type'
+    , type'    = type''
     , name     = 
-        case type' of
+        case type'' of
           AirTank -> "air tank"
+          FuelTank -> "fuel tank"
           _       -> "Henry"
     , uuid    = uuid
     , owner   = owner
@@ -170,11 +226,17 @@ addSpaceObject owner type' (objects, seed) =
             , thrusters = []
             }
     , sprite =
-        case type' of
+        case type'' of
           AirTank ->
           { src        = "stuff/oxygen-tank"
           , dimensions = (20, 20)
           , area       = (20, 20)
+          , position   = (0,0)
+          }
+          FuelTank ->
+          { src        = "stuff/fuel-tank"
+          , dimensions = (10, 22)
+          , area       = (10, 22)
           , position   = (0,0)
           }
           _ ->
@@ -184,7 +246,9 @@ addSpaceObject owner type' (objects, seed) =
           , position   = (0,0)
           }
     , remove = False
-    } :: objects, seede'')
+    } :: objects
+    )
+    <|seed'
 
 getFloat : Float -> Float -> Seed -> (Float, Seed)
 getFloat i j seed = 
@@ -202,7 +266,6 @@ makeUUID seed =
       foldr (always addToUUID) ([], seed) [0..15]
   in
     (floatsToString (fst floats), snd floats)
-
 
 floatsToString : List Float -> String
 floatsToString list =

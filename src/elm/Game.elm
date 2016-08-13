@@ -15,6 +15,13 @@ type alias Model =
   , died          : Bool
   , deathMessage  : String
   , ready         : Bool
+  , chatInput     : String
+  , chatMessages  : List ChatMessage
+  }
+
+type alias ChatMessage =
+  { content : String
+  , speaker : String
   }
 
 init : Model
@@ -26,6 +33,8 @@ init =
   , died          = False
   , deathMessage  = ""
   , ready         = False
+  , chatInput     = ""
+  , chatMessages  = []
   }
 
 

@@ -18,8 +18,7 @@ readOut player =
   in
   div
   [ class "read-out-container" ]
-  [ point "READ OUT"
-  , column (map point keys)
+  [ column (map point keys)
   , column (map point values)
   ]
 
@@ -35,20 +34,29 @@ content player =
     (sx, sy) = player.sector
     (a, va)  = player.angle
     (vx, vy) = player.velocity
-    {fuel, air, mass, direction} = player
+
+    {fuel, air, mass, direction, name} = 
+      player
+
+    name' =
+      if (length name) > 0 then
+        slice 0 8 name
+      else
+        "NO NAME!"
   in
   unzip
-  [ "--------"  . "--------"
-  , "STATUS"    . "NOMINAL"
+  [ "READ OUT"  . name'
   , "--------"  . "--------"
+  , "STATUS"    . "NOMINAL"
+  , "--inv"     . "--------"
   , "FUEL"      . ((nf 6 (oneDecimal fuel))   ++ "l")
   , "AIR"       . ((nf 6 (oneDecimal air)) ++ "l")
   , "POWER"     . "unavaila"
   , "MASS"      . ((nf 6 (oneDecimal mass)) ++ " yH")
-  , "--------"  . "--------"
+  , "MISSILES"  . "0"
+  , "--pos"     . "--------"
   , "rpms "     . (nf 4 (-va * (10/9)))
   , "dir"       . (angleFormat (direction / pi * 200))
-  , "POSITION"  . "--------"
   , ": angle"   . (angleFormat (-a / 0.9))
   , ": x"       . toString (sx - 100)
   , ": y"       . toString (sy - 100)

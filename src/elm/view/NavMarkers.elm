@@ -67,10 +67,9 @@ draw player object =
     y = (cos position) * -r
 
     markerType =
-      if rv < 120 then
-        if rv < 60 then "normal"
-        else  "highlight"
-      else "urgent"
+      if rv > 150 then "urgent" else
+      if rv > 75 then "highlight" else "normal"
+
   in
   "markers/thing-" ++ markerType
   |>marker

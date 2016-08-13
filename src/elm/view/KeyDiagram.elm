@@ -10,19 +10,24 @@ import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 
 
-keyDiagram : Html Msg
-keyDiagram =
-  "key-diagram"
-  |>root
-  |>image 156 131
-  |>toHtml
-
 keyExample : Html Msg
 keyExample =
   div
   [ class "key-example" ]
-  [ "key-example"
-    |>root
-    |>image 178 178
-    |>toHtml
+  [ img
+    [ src (root "key-example")
+    , class "key-example-image"
+    ]
+    []
+  ]
+
+keyDiagram : Html Msg
+keyDiagram =
+  div
+  [ class "key-diagram" ]
+  [ img
+    [ src (root "key-diagram")
+    , class "key-diagram-image"
+    ]
+    []
   ]

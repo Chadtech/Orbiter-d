@@ -14,7 +14,10 @@ type alias Boost      = Bool
 type Msg 
   = Refresh Time
   | HandleKeys Keyboard.Msg
-  | PopulateFromRandomness Time.Time
+  | PopulateFromRandomness Time
+  | UpdateName String
+  | UpdateChatInput String
+  | CheckForEnter Int
 
 type alias Sprite =
   { dimensions : Dimensions
