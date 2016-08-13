@@ -18,6 +18,7 @@ type Msg
   | UpdateName String
   | UpdateChatInput String
   | CheckForEnter Int
+  | WSRecieve String
 
 type alias Sprite =
   { dimensions : Dimensions

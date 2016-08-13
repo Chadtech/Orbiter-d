@@ -32,7 +32,7 @@ randomNames =
   , "Ramsey"
   , "Anscombe"
   , "Moore"
-  , "Wilkinson"
+  , "Harvie"
   , "Reich"
   , "Lang"
   , "Partch"
@@ -43,6 +43,7 @@ randomNames =
   , "Holmes"
   , "Jackson"
   , "Roberts"
+  , "Marshall"
   ]
 
 initLocalObjects : Seed -> UUID -> SpaceObjectDict

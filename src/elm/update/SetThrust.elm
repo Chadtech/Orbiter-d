@@ -8,13 +8,15 @@ import List        exposing (map, foldr, filter)
 setThrust: SpaceObject -> SpaceObject
 setThrust object =
   let
-    {velocity, engine, angle, mass} = object
+    {velocity, engine, angle, mass, fuel} = object
     {boost, thrusters} = engine
     (a, va)            = angle
-    massFactor         = mass / 1528
+    massFactor         = mass / 5528
 
     firingThrusters =
-      filter isFiring thrusters
+      if fuel > 0 then
+        filter isFiring thrusters
+      else []
 
     calculateThrust' =
       calculateThrust boost a massFactor

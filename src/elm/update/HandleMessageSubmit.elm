@@ -5,7 +5,7 @@ import Types exposing (..)
 import SpaceObject exposing (..)
 import Dict exposing (get)
 import Maybe exposing (withDefault)
-import String exposing (length)
+import String exposing (length, slice)
 
 handleMessageSubmit : Model -> Model
 handleMessageSubmit model =
@@ -23,4 +23,5 @@ makeChatMessage {playerId, chatInput, localObjects} =
   get playerId localObjects
   |>withDefault dummyShip
   |> .name
+  |>slice 0 8
   |>ChatMessage chatInput

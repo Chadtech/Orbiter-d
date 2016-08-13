@@ -17,7 +17,12 @@ import Init             exposing (init)
 import List
 import String           exposing (length, slice)
 import HandleMessageSubmit exposing (handleMessageSubmit)
+import HandleWebSocketMessage exposing (handleWebSocketMessage)
+import WebSocket
+--import Json.Decode as Json
+import Json.Decode exposing (..)
 import Debug exposing (log)
+
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -36,6 +41,7 @@ subscriptions {ready} =
     Sub.batch
     [ Sub.map HandleKeys Keyboard.subscriptions
     , diffs Refresh
+    , WebSocket.listen "ws://ctuniverse.zrg.cc/ws" WSRecieve
     ]
   else 
     times PopulateFromRandomness
@@ -43,6 +49,9 @@ subscriptions {ready} =
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
+
+    WSRecieve json ->
+      (handleWebSocketMessage json model, Cmd.none)
 
     Refresh dt ->
       let
