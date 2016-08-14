@@ -80,7 +80,7 @@ jsonToSpaceObject uuid owner type' gx gy vx vy =
   , missiles =0
   , type' =
       case type' of
-        "Ship" -> Craft
+        "Ship" -> Ship
         _ -> AirTank
   , name = "THOMAS"
   , uuid = uuid

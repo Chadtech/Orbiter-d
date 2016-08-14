@@ -15,6 +15,7 @@ import PopulateArea     exposing (populateArea)
 
 gameScope : Player -> SpaceObjects -> Html Msg
 gameScope player objects =
+  (collage 600 600 >> toHtml)
   [ layerer 
     [ area
       |>populateArea   player objects
@@ -22,10 +23,26 @@ gameScope player objects =
       |>backdropGalaxy player
       |>backdropStars  player
       |>rotateArea     player
+    , sky player.global
     , draw player
     ]
   ]
-  |>collage 600 600 >> toHtml
+
+sky : Coordinate -> Form
+sky (x,y) =
+  let 
+    transparency = 
+      let 
+        x'   = x - 60000
+        y'   = y - 60000
+        dist = sqrt (x'^2 + y'^2) 
+      in
+      if dist > 8000 then 0
+      else (8000 - dist) / 4000
+  in
+  "celestia/sky"
+  |>image' 601 601
+  |>alpha transparency
 
 rotateArea : Player -> Form -> Form
 rotateArea {angle} area =

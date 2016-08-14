@@ -12,7 +12,7 @@ type OnCollision =
   OnCollision (SpaceObject -> SpaceObject)
 
 type SpaceObjectType 
-  = Craft
+  = Ship
   | AirTank
   | FuelTank
   | Missile
@@ -96,7 +96,7 @@ playersShip =
   , air         = 63
   , mass        = 852
   , missiles    = 0
-  , type'       = Craft
+  , type'       = Ship
   , name        = "Frege"
   , uuid        = "40"
   , owner       = "40"
@@ -142,7 +142,7 @@ player2 =
   , air         = 63
   , mass        = 852
   , missiles    = 0
-  , type'       = Craft
+  , type'       = Ship
   , name        = "Russell"
   , uuid        = "03"
   , owner       = "40"
@@ -187,7 +187,7 @@ dummyShip =
   , air         = 63
   , mass        = 852
   , missiles    = 0
-  , type'       = Craft
+  , type'       = Ship
   , name        = "dummy"
   , uuid        = "21"
   , owner       = "40"

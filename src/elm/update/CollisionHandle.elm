@@ -175,7 +175,7 @@ collisionsHandle dt model =
 
     craft =
       objects
-      |>filter (.type' >> (==) Craft)
+      |>filter (.type' >> (==) Ship)
       |>map .uuid
 
     objects' =
