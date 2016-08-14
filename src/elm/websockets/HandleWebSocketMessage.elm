@@ -5,10 +5,12 @@ import Json.Decode exposing (..)
 import Game exposing (..)
 import Types exposing (..)
 import SpaceObject exposing (..)
+import Engine exposing (..)
 import List exposing (head, tail)
 import Dict exposing (insert)
 --import Maybe exposing (withDefault)
 import Debug exposing (log)
+
 
 type alias SpaceObjectPayload =
   { uuid : UUID
@@ -20,6 +22,12 @@ type alias SpaceObjectPayload =
   , angle : Float
   , anglevelocity : Float
   , boost : Int
+  , thrusters : List ThrusterPayload
+  }
+
+type alias ThrusterPayload =
+  { firing : Int
+  , type' : String
   }
 
 handleWebSocketMessage : String -> Model -> Model
@@ -69,6 +77,8 @@ spaceObject payload =
     sector =
       let (gx, gy) = payload.global in
       (getSector gx, getSector gy)
+  
+    ya = log "Thrusters" payload.thrusters
   in
   { angle = (payload.angle, payload.anglevelocity)
   , local = local
@@ -93,7 +103,8 @@ spaceObject payload =
   , owner = payload.owner
   , engine = 
     { boost = payload.boost == 1
-    , thrusters = []
+    , thrusters = 
+        List.map thruster payload.thrusters
     }
   , sprite =
       case payload.type' of
@@ -110,6 +121,21 @@ spaceObject payload =
         , position   = (0,0)
         }
   , remove = False
+  }
+
+thruster : ThrusterPayload -> Thruster
+thruster payload =
+  { firing = payload.firing 
+  , type' =
+      case payload.type' of
+        "main" -> Main
+        "frontleft" -> FrontLeft
+        "frontright" -> FrontRight
+        "sideleft" -> SideLeft
+        "sideright" -> SideRight
+        "backleft" -> BackLeft
+        "backright" -> BackRight
+        _ -> Main
   }
 
 payload : Decoder a -> String -> Result String a
@@ -131,7 +157,15 @@ spaceObjectDecoder =
     |: ("angle" := float)
     |: ("angle_velocity" := float)
     |: ("boost" := int)
+    |: thrusterDecoder
 
+thrusterDecoder : Decoder (List ThrusterPayload)
+thrusterDecoder =
+  object2 ThrusterPayload
+    ("firing" := int)
+    ("type" := string)
+  |>list
+  |>(:=) "thrusters"
 
 getSector : Float -> Int
 getSector f = floor (f / 600)
