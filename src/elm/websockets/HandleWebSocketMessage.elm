@@ -6,10 +6,8 @@ import Game exposing (..)
 import Types exposing (..)
 import SpaceObject exposing (..)
 import Engine exposing (..)
-import List exposing (head, tail)
+import List
 import Dict exposing (insert)
---import Maybe exposing (withDefault)
-import Debug exposing (log)
 
 
 type alias SpaceObjectPayload =
