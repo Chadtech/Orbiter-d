@@ -19,6 +19,7 @@ type alias SpaceObjectPayload =
   , velocity: Coordinate
   , angle : Float
   , anglevelocity : Float
+  , boost : Int
   }
 
 handleWebSocketMessage : String -> Model -> Model
@@ -82,7 +83,7 @@ spaceObject payload =
   , fuel = 0
   , air = 0
   , mass = 0
-  , missiles =0
+  , missiles = 0
   , type' =
       case payload.type' of
         "ship" -> Ship
@@ -91,7 +92,7 @@ spaceObject payload =
   , uuid = payload.uuid
   , owner = payload.owner
   , engine = 
-    { boost = False
+    { boost = payload.boost == 1
     , thrusters = []
     }
   , sprite =
@@ -129,6 +130,7 @@ spaceObjectDecoder =
     |: ("velocity" := (tuple2 (,) float float))
     |: ("angle" := float)
     |: ("angle_velocity" := float)
+    |: ("boost" := int)
 
 
 getSector : Float -> Int
