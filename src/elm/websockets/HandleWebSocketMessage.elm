@@ -1,12 +1,25 @@
 module HandleWebSocketMessage exposing (handleWebSocketMessage)
 
+import Json.Decode.Extra exposing (..)
 import Json.Decode exposing (..)
 import Game exposing (..)
 import Types exposing (..)
 import SpaceObject exposing (..)
+import List exposing (head, tail)
 import Dict exposing (insert)
+--import Maybe exposing (withDefault)
 import Debug exposing (log)
 
+type alias SpaceObjectPayload =
+  { uuid : UUID
+  , owner : UUID
+  --, name : Name
+  , type' : String
+  , global : Coordinate
+  , velocity: Coordinate
+  , angle : Float
+  , anglevelocity : Float
+  }
 
 handleWebSocketMessage : String -> Model -> Model
 handleWebSocketMessage json model =
@@ -18,7 +31,7 @@ handleWebSocketMessage json model =
   in
     case messageType of
       ("SpaceObject", _) ->
-        handleObjectUpdate model json
+        handleObjectUpdate json model 
 
       _ -> 
         model
@@ -27,69 +40,63 @@ getMessageType : Decoder String
 getMessageType =
   object1 identity ("messagetype" := string)
 
-handleObjectUpdate : Model -> String -> Model
-handleObjectUpdate model json =
-  let
-    object =
-      case decodeString spaceObjectDecoder json of
-        Ok object -> object
-        Err _ -> dummyShip
-  in
-  { model
-  | remoteObjects = 
-      insert
-        object.uuid
-        object
-        model.remoteObjects
-  }
+handleObjectUpdate : String -> Model -> Model
+handleObjectUpdate json model =
+  case decodeSpaceObject json of
+    Ok payload ->
+      let object = spaceObject payload in
+      { model
+      | remoteObjects = 
+          insert
+            object.uuid
+            object
+            model.remoteObjects
+      }
+    Err _ -> model
 
-spaceObjectDecoder : Decoder SpaceObject
-spaceObjectDecoder =
-  object7 jsonToSpaceObject 
-    ("uuid"       := string)
-    ("owner"      := string)
-    ("type"       := string) 
-    ("global_x"   := float)
-    ("global_y"   := float)
-    ("velocity_x" := float)
-    ("velocity_y" := float)
-  |>(:=) "o"
-  |>object1 identity
-
-jsonToSpaceObject : UUID -> UUID -> String -> Float -> Float -> Float -> Float -> SpaceObject
-jsonToSpaceObject uuid owner type' gx gy vx vy =
+spaceObject : SpaceObjectPayload -> SpaceObject
+spaceObject payload =
   let
-    lx = modulo gx
-    ly = modulo gy
+    local =
+      let (gx, gy) = payload.global in
+      (modulo gx, modulo gy)
+
+    direction =
+      let (vx, vy) = payload.velocity in
+      atan2 vx vy
+
+    sector =
+      let (gx, gy) = payload.global in
+      (getSector gx, getSector gy)
   in
-  { angle = (0, 0)
-  , local = (lx, ly)
-  , global = (gx, gy)
-  , velocity = (vx, gy)
-  , direction = atan2 vx vy
+  { angle = (payload.angle, payload.anglevelocity)
+  , local = local
+  , global = payload.global
+  , velocity = payload.velocity
+  , direction = direction
   , dimensions =
-      case type' of
-        "Ship" -> (34, 29)
+      case payload.type' of
+        "ship" -> (34, 29)
         _ -> (20, 20)
-  , sector = (getSector gx, getSector gy)
+  , sector = sector
   , fuel = 0
   , air = 0
   , mass = 0
   , missiles =0
   , type' =
-      case type' of
-        "Ship" -> Ship
+      case payload.type' of
+        "ship" -> Ship
         _ -> AirTank
   , name = "THOMAS"
-  , uuid = uuid
-  , owner = owner
+  , uuid = payload.uuid
+  , owner = payload.owner
   , engine = 
     { boost = False
     , thrusters = []
     }
   , sprite =
-      case type' of
-        "Ship" ->
+      case payload.type' of
+        "ship" ->
         { src        = "ship/ship"
         , dimensions = (47, 47)
         , area       = (138, 138)
@@ -103,6 +110,26 @@ jsonToSpaceObject uuid owner type' gx gy vx vy =
         }
   , remove = False
   }
+
+payload : Decoder a -> String -> Result String a
+payload = (:=) "o" >> object1 identity >> decodeString
+
+decodeSpaceObject : String -> Result String SpaceObjectPayload
+decodeSpaceObject =
+  decodeString (object1 identity ("o" := spaceObjectDecoder))
+
+spaceObjectDecoder : Decoder SpaceObjectPayload
+spaceObjectDecoder =
+  succeed SpaceObjectPayload
+    |: ("uuid" := string)
+    |: ("owner" := string)
+    --|: ("name" := string)
+    |: ("type" := string)
+    |: ("global" := (tuple2 (,) float float))
+    |: ("velocity" := (tuple2 (,) float float))
+    |: ("angle" := float)
+    |: ("angle_velocity" := float)
+
 
 getSector : Float -> Int
 getSector f = floor (f / 600)
