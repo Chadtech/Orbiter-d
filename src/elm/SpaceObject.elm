@@ -30,6 +30,7 @@ type alias SpaceObject =
   , sprite      : Sprite
   , fuel        : Float
   , air         : Float
+  , missiles    : Int
   , mass        : Float
   , name        : String
   , owner       : UUID
@@ -57,6 +58,7 @@ o2Box =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
+  , missiles    = 0
   , type'       = AirTank
   , name        = "air box"
   , uuid        = "12"
@@ -93,6 +95,7 @@ playersShip =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
+  , missiles    = 0
   , type'       = Craft
   , name        = "Frege"
   , uuid        = "40"
@@ -138,6 +141,7 @@ player2 =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
+  , missiles    = 0
   , type'       = Craft
   , name        = "Russell"
   , uuid        = "03"
@@ -182,6 +186,7 @@ dummyShip =
   , fuel        = 505.1
   , air         = 63
   , mass        = 852
+  , missiles    = 0
   , type'       = Craft
   , name        = "dummy"
   , uuid        = "21"

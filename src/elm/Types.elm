@@ -9,6 +9,7 @@ type alias Coordinate = (Float, Float)
 type alias Sector     = (Int, Int)
 type alias Dimensions = (Int, Int)
 type alias UUID       = String
+type alias Name       = String
 type alias Boost      = Bool
 
 type Msg 

@@ -11,7 +11,7 @@ setThrust object =
     {velocity, engine, angle, mass, fuel} = object
     {boost, thrusters} = engine
     (a, va)            = angle
-    massFactor         = mass / 5528
+    massFactor         = mass / 3528
 
     firingThrusters =
       if fuel > 0 then
@@ -78,11 +78,16 @@ calculateThrust boost angle massFactor {type'} =
 
 calculateAngularThrust : Boost -> Float -> Thruster -> Float
 calculateAngularThrust boost massFactor {type'} =
+  let 
+    attenuation =
+      if boost then 5 / massFactor
+      else 1 / massFactor 
+  in
   case type' of
-    FrontLeft  -> rotatePower  / massFactor
-    FrontRight -> -rotatePower / massFactor
-    BackLeft   -> -rotatePower / massFactor
-    BackRight  -> rotatePower  / massFactor
+    FrontLeft  -> rotatePower  * attenuation
+    FrontRight -> -rotatePower * attenuation
+    BackLeft   -> -rotatePower * attenuation
+    BackRight  -> rotatePower  * attenuation
     _ -> 0
 
 

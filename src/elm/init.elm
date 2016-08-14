@@ -55,7 +55,7 @@ initLocalObjects seed uuid =
     (objects, seed'') =
       foldr 
         (always (addSpaceObject uuid)) 
-        ([], seed') 
+        ([], seed')
         [0..15]
   in
     player :: objects
@@ -78,9 +78,6 @@ makePlayer seed uuid =
 
     vx' = getFloat -70 70 (snd va)
     vy' = getFloat -70 70 (snd vx')
-
-    --gx = getFloat 7000 55000 seed
-    --gy = getFloat 7000 55000 (snd gx)
 
     clockwiseOrbit = 
       (fst (getFloat 0 1 (snd vy'))) > 0.5
@@ -124,6 +121,7 @@ makePlayer seed uuid =
   , fuel        = 1010.2
   , air         = 159
   , mass        = 852
+  , missiles    = 5
   , type'       = Craft
   , name        = playersName
   , uuid        = uuid
@@ -212,6 +210,7 @@ addSpaceObject owner (objects, seed) =
     , fuel     = 0
     , air      = 0
     , mass     = 1
+    , missiles = 0
     , type'    = type''
     , name     = 
         case type'' of

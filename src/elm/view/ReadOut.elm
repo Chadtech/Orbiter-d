@@ -35,7 +35,7 @@ content player =
     (a, va)  = player.angle
     (vx, vy) = player.velocity
 
-    {fuel, air, mass, direction, name} = 
+    {fuel, air, mass, missiles, direction, name} = 
       player
 
     name' =
@@ -53,7 +53,7 @@ content player =
   , "AIR"       . ((nf 6 (oneDecimal air)) ++ "l")
   , "POWER"     . "unavaila"
   , "MASS"      . ((nf 6 (oneDecimal mass)) ++ " yH")
-  , "MISSILES"  . "0"
+  , "MISSILES"  . (toString missiles)
   , "--pos"     . "--------"
   , "rpms "     . (nf 4 (-va * (10/9)))
   , "dir"       . (angleFormat (direction / pi * 200))
