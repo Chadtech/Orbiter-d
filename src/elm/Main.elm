@@ -19,9 +19,6 @@ import String           exposing (length, slice)
 import HandleMessageSubmit exposing (handleMessageSubmit)
 import HandleWebSocketMessage exposing (handleWebSocketMessage)
 import WebSocket
---import Json.Decode as Json
-import Json.Decode exposing (..)
-import Debug exposing (log)
 
 
 rate : Time -> Time

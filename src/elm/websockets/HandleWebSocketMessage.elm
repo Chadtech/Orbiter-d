@@ -23,11 +23,9 @@ handleWebSocketMessage json model =
       _ -> 
         model
 
-
 getMessageType : Decoder String
 getMessageType =
   object1 identity ("messagetype" := string)
-
 
 handleObjectUpdate : Model -> String -> Model
 handleObjectUpdate model json =
@@ -48,11 +46,11 @@ handleObjectUpdate model json =
 spaceObjectDecoder : Decoder SpaceObject
 spaceObjectDecoder =
   object7 jsonToSpaceObject 
-    ("uuid" := string)
-    ("owner" := string)
-    ("type" := string) 
-    ("global_x" := float)
-    ("global_y" := float)
+    ("uuid"       := string)
+    ("owner"      := string)
+    ("type"       := string) 
+    ("global_x"   := float)
+    ("global_y"   := float)
     ("velocity_x" := float)
     ("velocity_y" := float)
   |>(:=) "o"
