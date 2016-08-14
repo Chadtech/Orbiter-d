@@ -75,8 +75,6 @@ spaceObject payload =
     sector =
       let (gx, gy) = payload.global in
       (getSector gx, getSector gy)
-  
-    ya = log "Thrusters" payload.thrusters
   in
   { angle = (payload.angle, payload.anglevelocity)
   , local = local
