@@ -27,3 +27,14 @@ type alias Sprite =
   , src        : String
   , position   : (Int, Int)
   }
+
+type Death
+  = RanOutOfAir
+  | FellIntoPlanet
+  | HighSpeedCollision
+
+
+type alias ChatMessage =
+  { content : String
+  , speaker : String
+  }

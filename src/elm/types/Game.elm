@@ -4,8 +4,7 @@ import Keyboard.Extra   as Keyboard
 import SpaceObject exposing (SpaceObject, SpaceObjects, playersShip, player2, o2Box)
 import Dict exposing (Dict, fromList)
 import Time exposing (Time, now)
-import Task
-import Random exposing (initialSeed)
+import Types exposing (..)
 
 type alias Model =
   { localObjects  : Dict String SpaceObject
@@ -17,11 +16,6 @@ type alias Model =
   , ready         : Bool
   , chatInput     : String
   , chatMessages  : List ChatMessage
-  }
-
-type alias ChatMessage =
-  { content : String
-  , speaker : String
   }
 
 init : Model
