@@ -59,7 +59,7 @@ initLocalObjects seed uuid =
         --[]
         [0..15]
   in
-    player :: objects
+    {player | uuid = "40!", global = (30000, 30000)} :: [player]
     |>map bundle
     |>fromList
 
@@ -140,7 +140,7 @@ makePlayer seed uuid =
       ]
     }
   , sprite =
-    { src        = "ship/ship"
+    { src        = "ship/ship-1"
     , dimensions = (47, 47)
     , area       = (138, 138)
     , position   = (0,0)

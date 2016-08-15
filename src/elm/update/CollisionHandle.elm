@@ -1,4 +1,4 @@
-module CollisionHandle exposing (collisionsHandle)
+module CollisionHandle exposing (handleCollisions)
 
 import Collision   exposing (..)
 import Types       exposing (..)
@@ -138,7 +138,9 @@ applyCollisions dt playersId objects =
     |>foldr insertObject objects
 
 markRemove : SpaceObject -> SpaceObject
-markRemove object = { object | remove = True }
+markRemove object = 
+  if object.type' == Ship then object
+  else { object | remove = True }
 
 getPlayer : UUID -> SpaceObjects -> Player
 getPlayer uuid objects =
@@ -157,19 +159,31 @@ bundle : SpaceObject -> (UUID, SpaceObject)
 bundle object = (object.uuid, object)
 
 onCollision : SpaceObject -> Player -> Player
-onCollision {type', velocity} player = 
+onCollision object player = 
   let
     relativeVelocity =
       let 
-        (ovx, ovy) = velocity
+        (ovx, ovy) = object.velocity
         (pvx, pvy) = player.velocity
       in
       sqrt ((pvx - ovx)^2 + (pvy - ovy)^2)
   in 
   if relativeVelocity > 35 then
-    { player | explode = True }
+    { player 
+    | explode = True
+    , sprite =
+      { src        = "ship/ship-exploded"
+      , dimensions = (47, 47)
+      , area       = (138, 138)
+      , position   = (0,0)
+      }
+    , engine = 
+      { boost = False
+      , thrusters = []
+      }
+     }
   else
-    case type' of
+    case object.type' of
       AirTank ->
         { player | air = player.air + 150 }
       FuelTank ->
@@ -178,8 +192,8 @@ onCollision {type', velocity} player =
         { player | missiles = player.missiles + 1}
       _ -> player
 
-collisionsHandle : Time -> Model -> SpaceObjects
-collisionsHandle dt model =
+collisionsHandling : Time -> Model -> SpaceObjects
+collisionsHandling dt model =
   let
     objects = 
       union model.localObjects model.remoteObjects
@@ -195,11 +209,30 @@ collisionsHandle dt model =
     |>filter (.remove >> not)
 
 
+handleCollisions : Time -> Model -> Model
+handleCollisions dt model =
+  let
+    (localObjects, remoteObjects) = 
+      collisionsHandling dt model
+      |>seperateObjects model.playerId
+  in
+  { model
+  | localObjects = localObjects
+  , remoteObjects = remoteObjects
+  }
 
+seperateObjects : UUID -> SpaceObjects -> (SpaceObjectDict, SpaceObjectDict)
+seperateObjects uuid objects =
+  let isLocal' = isLocal uuid in
+  (dictOutput isLocal' objects, dictOutput (isLocal' >> not) objects)
 
+dictOutput : (SpaceObject -> Bool) -> SpaceObjects ->  SpaceObjectDict
+dictOutput filter' objects =
+  fromList <| List.map bundle <| List.filter filter' objects
 
-
-
+isLocal : UUID -> SpaceObject -> Bool
+isLocal playersId object =
+  playersId == object.owner
 
 
 
