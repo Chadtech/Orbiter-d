@@ -157,27 +157,28 @@ bundle : SpaceObject -> (UUID, SpaceObject)
 bundle object = (object.uuid, object)
 
 onCollision : SpaceObject -> Player -> Player
-onCollision object player = 
+onCollision {type', velocity} player = 
   let
     relativeVelocity =
-      log "RV!!" <|
       let 
-        (ovx, ovy) = object.velocity
+        (ovx, ovy) = velocity
         (pvx, pvy) = player.velocity
       in
       sqrt ((pvx - ovx)^2 + (pvy - ovy)^2)
   in 
-  if relativeVelocity > 45 then
-    log "BLOWN UP" player
+  if relativeVelocity > 35 then
+    { player | explode = True }
   else
-    case object.type' of
+    case type' of
       AirTank ->
         { player | air = player.air + 150 }
       FuelTank ->
         { player | fuel = player.fuel + 762.2}
+      Missile ->
+        { player | missiles = player.missiles + 1}
       _ -> player
 
-collisionsHandle : Time -> Model -> Model
+collisionsHandle : Time -> Model -> SpaceObjects
 collisionsHandle dt model =
   let
     objects = 
@@ -189,26 +190,10 @@ collisionsHandle dt model =
       |>filter (.type' >> (==) Ship)
       |>map .uuid
 
-    objects' =
-      foldr (applyCollisions dt) objects craft
-      |>filter (.remove >> not)
-
-    isLocal' = 
-      isLocal model.playerId
-
   in
-    { model
-    | localObjects = dictOutput isLocal' objects'
-    , remoteObjects = dictOutput (isLocal' >> not) objects' 
-    }
+    foldr (applyCollisions dt) objects craft
+    |>filter (.remove >> not)
 
-dictOutput : (SpaceObject -> Bool) -> SpaceObjects ->  SpaceObjectDict
-dictOutput filter' objects =
-  fromList <| map bundle <| filter filter' objects
-
-isLocal : UUID -> SpaceObject -> Bool
-isLocal playersId object =
-  playersId == object.owner
 
 
 

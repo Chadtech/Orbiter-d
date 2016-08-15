@@ -9,13 +9,15 @@ import Dict exposing (..)
 import Maybe exposing (withDefault)
 import CheckIfDead exposing (checkIfDead)
 import Debug exposing (log)
+import List
 
 
 refresh : Time -> Model -> Model
 refresh dt model =
   let 
-    {localObjects, remoteObjects} = 
-      collisionsHandle dt model 
+    (localObjects, remoteObjects) = 
+      collisionsHandle dt model
+      |>seperateObjects model.playerId  
 
     (deathState, deathMessage) =
       checkIfDead model
@@ -28,11 +30,20 @@ refresh dt model =
         NotDead -> False
         _ -> True
   , deathMessage = deathMessage
-  --, remove =
-  --    case deathState of
-  --      FellIntoPlanet     -> True
-  --      HighSpeedCollision -> False
-  --      RanOutOfAir        -> False
-  --      _                  -> False
-
   }
+
+seperateObjects : UUID -> SpaceObjects -> (SpaceObjectDict, SpaceObjectDict)
+seperateObjects uuid objects =
+  let isLocal' = isLocal uuid in
+  (dictOutput isLocal' objects, dictOutput (isLocal' >> not) objects)
+
+dictOutput : (SpaceObject -> Bool) -> SpaceObjects ->  SpaceObjectDict
+dictOutput filter' objects =
+  fromList <| List.map bundle <| List.filter filter' objects
+
+isLocal : UUID -> SpaceObject -> Bool
+isLocal playersId object =
+  playersId == object.owner
+
+bundle : SpaceObject -> (UUID, SpaceObject)
+bundle object = (object.uuid, object)

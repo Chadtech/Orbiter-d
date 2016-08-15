@@ -37,6 +37,7 @@ type alias SpaceObject =
   , uuid        : UUID
   , engine      : Engine
   , remove      : Bool
+  , explode     : Bool
   }
 
 dummyShip : SpaceObject
@@ -74,4 +75,5 @@ dummyShip =
     , position   = (0,0)
     }
   , remove      = False
+  , explode     = False
   }

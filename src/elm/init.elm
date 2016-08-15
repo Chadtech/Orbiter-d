@@ -146,6 +146,7 @@ makePlayer seed uuid =
     , position   = (0,0)
     }
   , remove       = False
+  , explode      = False
   }
   seed'
 
@@ -247,6 +248,7 @@ addSpaceObject owner (objects, seed) =
           , position   = (0,0)
           }
     , remove = False
+    , explode = False
     } :: objects
     )
     <|seed'
