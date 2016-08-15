@@ -14,6 +14,7 @@ import GameScope        exposing (gameScope)
 import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
 import ChatRoom         exposing (chatroom)
+import Died             exposing (diedNotice)
 import Components       exposing (veryIgnorablePoint)
 import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
@@ -39,6 +40,7 @@ view model =
       [ gameScope player objects 
       , navMarkers player objects
       , velocityGauge player
+      , diedNotice model.died model.deathMessage
       ]
     , div
       [ class "right-hud" ]

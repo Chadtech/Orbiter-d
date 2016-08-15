@@ -28,10 +28,11 @@ type alias Sprite =
   , position   : (Int, Int)
   }
 
-type Death
+type DeathState
   = RanOutOfAir
   | FellIntoPlanet
   | HighSpeedCollision
+  | NotDead
 
 
 type alias ChatMessage =

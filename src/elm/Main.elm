@@ -7,17 +7,16 @@ import Game             exposing (Model)
 import Types            exposing (..)
 import HandleKeys       exposing (handleKeys)
 import View             exposing (view)
-import UpdateObjects    exposing (updateObjects)
 import SetPlayersName   exposing (setPlayersName)
 import Dict             exposing (toList)
-import CollisionHandle  exposing (collisionsHandle)
 import Time             exposing (inMilliseconds)
 import Random           exposing (initialSeed)
 import Init             exposing (init)
 import List
-import String           exposing (length, slice)
-import HandleMessageSubmit exposing (handleMessageSubmit)
+import String                 exposing (length, slice)
+import HandleMessageSubmit    exposing (handleMessageSubmit)
 import HandleWebSocketMessage exposing (handleWebSocketMessage)
+import Refresh                exposing (refresh)
 import WebSocket
 
 
@@ -51,19 +50,7 @@ update msg model =
       (handleWebSocketMessage json model, Cmd.none)
 
     Refresh dt ->
-      let
-        dt'    = rate dt
-        model' =
-          let
-            {localObjects, remoteObjects} = 
-              collisionsHandle dt' model
-          in
-          { model
-          | localObjects  = updateObjects dt' localObjects
-          , remoteObjects = updateObjects dt' remoteObjects
-          }
-      in
-      (model', Cmd.none)
+      (refresh (rate dt) model, Cmd.none)
 
     HandleKeys keyMsg ->
       let

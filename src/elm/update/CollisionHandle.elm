@@ -158,13 +158,24 @@ bundle object = (object.uuid, object)
 
 onCollision : SpaceObject -> Player -> Player
 onCollision object player = 
-  case object.type' of
-    AirTank ->
-      { player | air = player.air + 150 }
-    FuelTank ->
-      { player | fuel = player.fuel + 762.2}
-
-    _ -> player
+  let
+    relativeVelocity =
+      log "RV!!" <|
+      let 
+        (ovx, ovy) = object.velocity
+        (pvx, pvy) = player.velocity
+      in
+      sqrt ((pvx - ovx)^2 + (pvy - ovy)^2)
+  in 
+  if relativeVelocity > 45 then
+    log "BLOWN UP" player
+  else
+    case object.type' of
+      AirTank ->
+        { player | air = player.air + 150 }
+      FuelTank ->
+        { player | fuel = player.fuel + 762.2}
+      _ -> player
 
 collisionsHandle : Time -> Model -> Model
 collisionsHandle dt model =

@@ -1,7 +1,7 @@
 module Game exposing (..)
 
 import Keyboard.Extra   as Keyboard
-import SpaceObject exposing (SpaceObject, SpaceObjects, playersShip, player2, o2Box)
+import SpaceObject exposing (SpaceObject, SpaceObjects)
 import Dict exposing (Dict, fromList)
 import Time exposing (Time, now)
 import Types exposing (..)
@@ -20,10 +20,10 @@ type alias Model =
 
 init : Model
 init =
-  { localObjects  = fromList [ ("40", playersShip), ("12", o2Box), ("03", player2)]
+  { localObjects  = fromList []
   , remoteObjects = fromList []
   , keys          = fst Keyboard.init
-  , playerId      = "40"
+  , playerId      = ""
   , died          = False
   , deathMessage  = ""
   , ready         = False

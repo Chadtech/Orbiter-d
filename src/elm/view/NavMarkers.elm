@@ -68,7 +68,7 @@ draw player object =
 
     markerType =
       if rv > 150 then "urgent" else
-      if rv > 75 then "highlight" else "normal"
+      if rv > 25 then "highlight" else "normal"
 
   in
   "markers/thing-" ++ markerType
