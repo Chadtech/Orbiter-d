@@ -13,7 +13,7 @@ import Dict exposing (insert)
 type alias SpaceObjectPayload =
   { uuid : UUID
   , owner : UUID
-  --, name : Name
+  , name : Name
   , type' : String
   , global : Coordinate
   , velocity: Coordinate
@@ -117,6 +117,7 @@ spaceObject payload =
         , position   = (0,0)
         }
   , remove = False
+  , explode = False
   }
 
 thruster : ThrusterPayload -> Thruster
@@ -146,7 +147,7 @@ spaceObjectDecoder =
   succeed SpaceObjectPayload
     |: ("uuid" := string)
     |: ("owner" := string)
-    --|: ("name" := string)
+    |: ("name" := string)
     |: ("type" := string)
     |: ("global" := (tuple2 (,) float float))
     |: ("velocity" := (tuple2 (,) float float))
