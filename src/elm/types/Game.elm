@@ -5,6 +5,7 @@ import SpaceObject exposing (SpaceObject, SpaceObjects)
 import Dict exposing (Dict, fromList)
 import Time exposing (Time, now)
 import Types exposing (..)
+import Random 
 
 type alias Model =
   { localObjects  : Dict String SpaceObject
@@ -16,6 +17,7 @@ type alias Model =
   , ready         : Bool
   , chatInput     : String
   , chatMessages  : List ChatMessage
+  , seed          : Random.Seed
   }
 
 init : Model
@@ -29,6 +31,7 @@ init =
   , ready         = False
   , chatInput     = ""
   , chatMessages  = []
+  , seed          = Random.initialSeed 0
   }
 
 

@@ -12,41 +12,26 @@ import List        exposing (map2, map, foldr, length)
 import Maybe       exposing (withDefault)
 import Debug       exposing (log)
 
-init : Model -> Seed -> Model
-init model seed =
+init : Model -> Model
+init model =
   let
-    (playerId, seed') = makeUUID seed
+    (playerId, seed) = 
+      makeUUID model.seed
+
+    (localObjects, seed') =
+      initLocalObjects
+        seed
+        playerId
   in
   { model
   | ready = True
   , playerId = playerId
-  , localObjects = 
-      initLocalObjects
-        seed'
-        playerId
+  , localObjects = localObjects
+  , seed = seed'
   }
 
-randomNames : List String
-randomNames =
-  [ "Russell"
-  , "Ramsey"
-  , "Anscombe"
-  , "Moore"
-  , "Harvie"
-  , "Reich"
-  , "Lang"
-  , "Partch"
-  , "Hamilton"
-  , "Newhaus"
-  , "Wolfe"
-  , "Hess"
-  , "Holmes"
-  , "Jackson"
-  , "Roberts"
-  , "Marshall"
-  ]
 
-initLocalObjects : Seed -> UUID -> SpaceObjectDict
+initLocalObjects : Seed -> UUID -> (SpaceObjectDict, Seed)
 initLocalObjects seed uuid =
   let
     (player, seed') = 
@@ -59,9 +44,9 @@ initLocalObjects seed uuid =
         --[]
         [0..15]
   in
-    {player | uuid = "40!", global = (30000, 30000)} :: [player]
-    |>map bundle
-    |>fromList
+    --{player | uuid = "40!", global = (30000, 30000)} :: [player]
+    (map bundle (player :: objects) |> fromList, seed')
+
 
 bundle : SpaceObject -> (UUID, SpaceObject)
 bundle object = (object.uuid, object)
@@ -276,5 +261,23 @@ floatsToString list =
   |>map (fromChar << fromCode << floor << (+) 65)
   |>foldr (++) ""
 
-
+randomNames : List String
+randomNames =
+  [ "Russell"
+  , "Ramsey"
+  , "Anscombe"
+  , "Moore"
+  , "Harvie"
+  , "Reich"
+  , "Lang"
+  , "Partch"
+  , "Hamilton"
+  , "Newhaus"
+  , "Wolfe"
+  , "Hess"
+  , "Holmes"
+  , "Jackson"
+  , "Roberts"
+  , "Marshall"
+  ]
 

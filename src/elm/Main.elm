@@ -60,7 +60,8 @@ update msg model =
         (handleKeys model keys, Cmd.map HandleKeys kCmd)
 
     PopulateFromRandomness time ->
-      (init model (initialSeed (floor time)), Cmd.none)
+      let time' = floor time in
+      (init { model | seed = initialSeed time'}, Cmd.none)
 
     UpdateName string ->
       (setPlayersName string model, Cmd.none)

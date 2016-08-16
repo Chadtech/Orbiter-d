@@ -14,14 +14,6 @@ import List
 
 refresh : Time -> Model -> Model
 refresh dt =
-  --let 
-  --  --(localObjects, remoteObjects) = 
-  --  --  collisionsHandle dt model
-  --  --  |>seperateObjects model.playerId  
-
-  --  (deathState, deathMessage) =
-  --    checkIfDead model
-  --in
   handleCollisions dt
   >>handleDeath
   >>handlePhysics dt
