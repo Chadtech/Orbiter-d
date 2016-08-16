@@ -26,6 +26,11 @@ init model =
   { model
   | ready = True
   , playerId = playerId
+  , focusOn = playerId
+  , playerName = 
+      get playerId localObjects
+      |>withDefault dummyShip
+      |> .name
   , localObjects = localObjects
   , seed = seed'
   }

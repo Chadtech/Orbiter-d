@@ -24,4 +24,5 @@ setPlayersName newName model =
           playerId 
           player' 
           localObjects
+    , playerName = newName
     }

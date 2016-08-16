@@ -51,7 +51,6 @@ handleDeath model =
           |> (.uuid)
       in
       { model
-      --| playerId = newPlayerId
       | localObjects =
           let {playerId, localObjects} = model in
           insert 

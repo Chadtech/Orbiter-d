@@ -16,5 +16,3 @@ refresh dt =
   handleCollisions dt
   >>handleDeath
   >>handlePhysics dt
-
-

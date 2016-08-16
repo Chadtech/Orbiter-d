@@ -8,6 +8,7 @@ import List        exposing (maximum, map, map2, concat, filter, isEmpty, foldr,
 import Dict        exposing (get, insert, union, values, fromList)
 import Maybe       exposing (withDefault)
 
+import Debug exposing (log)
 
 dot : Pt -> Pt -> Float
 dot (x1,y1) (x2,y2) = (x1*x2) + (y1*y2)

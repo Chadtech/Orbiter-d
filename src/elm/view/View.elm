@@ -20,6 +20,8 @@ import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
 import List             exposing (filter, append, map)
 
+import Debug exposing (log)
+
 view : Model -> Html Msg
 view model =
   let (player, objects) = isolatePlayer model in
@@ -34,7 +36,7 @@ view model =
       , keyDiagram
       , keyExample
       ]
-    , chatroom model player
+    , chatroom model
     , div
       [ class "game-view" ]
       [ gameScope player objects 
@@ -50,8 +52,6 @@ view model =
     ]
   ]
 
-
-
 isntPlayer : UUID -> SpaceObject -> Bool
 isntPlayer uuid' {uuid} = uuid' /= uuid
 
@@ -61,10 +61,10 @@ justObjects objects = map snd <| toList objects
 isolatePlayer : Model -> (Player, SpaceObjects)
 isolatePlayer model =
   let
-    {localObjects, remoteObjects, playerId} = model
+    {localObjects, remoteObjects, focusOn, playerId} = model
 
     player =
-      get playerId localObjects
+      get focusOn localObjects
       |>withDefault dummyShip
 
     objects =

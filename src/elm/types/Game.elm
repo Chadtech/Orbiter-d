@@ -12,6 +12,8 @@ type alias Model =
   , remoteObjects : Dict String SpaceObject
   , keys          : Keyboard.Model
   , playerId      : UUID
+  , playerName    : Name
+  , focusOn       : UUID
   , died          : Bool
   , deathMessage  : String
   , ready         : Bool
@@ -26,6 +28,8 @@ init =
   , remoteObjects = fromList []
   , keys          = fst Keyboard.init
   , playerId      = ""
+  , playerName    = ""
+  , focusOn       = ""
   , died          = False
   , deathMessage  = ""
   , ready         = False

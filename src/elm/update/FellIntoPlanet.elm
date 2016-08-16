@@ -12,15 +12,14 @@ import Debug exposing (log)
 fellIntoPlanet : Model -> String ->  Model
 fellIntoPlanet model deathMessage =
   let
-    oldPlayerId = model.playerId
-    (newPlayerId, seed) =
+    (newFocus, seed) =
       randomObject model
   in
   { model
-  | playerId = newPlayerId
+  | focusOn = newFocus
   , localObjects =
       let {localObjects} = model in
-      remove oldPlayerId localObjects
+      remove model.playerId localObjects
   , died = True
   , deathMessage = deathMessage
   , seed = seed

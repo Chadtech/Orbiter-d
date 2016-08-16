@@ -11,11 +11,11 @@ import List             exposing (map, reverse, intersperse)
 import Json.Decode as Json
 
 
-chatroom : Model -> Player -> Html Msg
-chatroom {chatInput, chatMessages} {name} =
+chatroom : Model -> Html Msg
+chatroom {chatInput, chatMessages, playerName} =
   div 
   [ class "chat-room-container" ]
-  [ nameField name 
+  [ nameField playerName 
   , chatMessagesList chatMessages
   , chatInputField chatInput
   ] 
