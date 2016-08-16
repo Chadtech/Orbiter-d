@@ -73,8 +73,6 @@ update msg model =
 
     UpdateChatInput string ->
       let 
-        l = length string 
-
         isEnter =
           String.toList string
           |>List.any ((==) '\n')
