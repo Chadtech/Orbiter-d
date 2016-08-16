@@ -22,7 +22,6 @@ readOut player =
   , column (map point values)
   ]
 
-
 column : List (Html Msg) -> Html Msg
 column list =
   div [ class "read-out-column" ] list

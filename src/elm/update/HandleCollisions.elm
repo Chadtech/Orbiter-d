@@ -4,11 +4,11 @@ import Collision   exposing (..)
 import Types       exposing (..)
 import SpaceObject exposing (..)
 import Game        exposing (Model)
-import List        exposing (maximum, map, map2, concat, filter, isEmpty, foldr, append)
+import List        exposing (maximum, map, map2, concat, filter, foldr)
 import Dict        exposing (get, insert, union, values, fromList)
 import Maybe       exposing (withDefault)
+import Util        exposing (bundle)
 
-import Debug exposing (log)
 
 dot : Pt -> Pt -> Float
 dot (x1,y1) (x2,y2) = (x1*x2) + (y1*y2)
@@ -154,9 +154,6 @@ insertObject : SpaceObject -> SpaceObjects -> SpaceObjects
 insertObject object =
   let {uuid} = object in
   map bundle >> fromList >> insert uuid object >> values
-
-bundle : SpaceObject -> (UUID, SpaceObject)
-bundle object = (object.uuid, object)
 
 onCollision : SpaceObject -> Player -> Player
 onCollision object player = 

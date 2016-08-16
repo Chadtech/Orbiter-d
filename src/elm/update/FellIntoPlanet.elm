@@ -6,8 +6,8 @@ import Dict exposing (toList, remove, union, get)
 import List exposing (..)
 import SpaceObject exposing (dummyShip, SpaceObject)
 import Maybe exposing (withDefault)
-import Random exposing (..)
-import Debug exposing (log)
+import Random exposing (Seed)
+import Util exposing (getInt)
 
 fellIntoPlanet : Model -> Model
 fellIntoPlanet model =
@@ -45,6 +45,3 @@ unravel i j l =
   else
     unravel i (j + 1) (tail l |> withDefault []) 
 
-getInt : Int -> Int -> Seed -> (Int, Seed)
-getInt i j seed =
-  Random.step (Random.int i j) seed

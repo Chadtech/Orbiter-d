@@ -9,6 +9,7 @@ import Random exposing (..)
 import List exposing (head, repeat, foldr)
 import Char        exposing (fromCode)
 import String      exposing (fromChar)
+import Util exposing (makeUUID, getFloat, getSector, modulo)
 
 highSpeedCollision : Model -> Model
 highSpeedCollision model =
@@ -84,37 +85,6 @@ makeDebris seed player =
   , explode = False 
   }
   seed4
-
-getSector : Float -> Int
-getSector f = floor (f / 600)
-
-modulo : Float -> Float
-modulo f =
-  let f' = floor f in
-  (toFloat (f' % 600)) + (f - (toFloat f'))
-
-getFloat : Float -> Float -> Seed -> (Float, Seed)
-getFloat i j seed =
-  Random.step (Random.float i j) seed
-
-makeUUID : Seed -> (String, Seed)
-makeUUID seed =
-  let
-    floats =
-      List.foldr (always addToUUID) ([], seed) [0..15]
-  in
-    (floatsToString (fst floats), snd floats)
-
-addToUUID : (List Float, Seed) -> (List Float, Seed)
-addToUUID (floats, seed) =
-  let (thisFloat, seed') = getFloat 0 15 seed in
-  (thisFloat :: floats, seed')
-
-floatsToString : List Float -> String
-floatsToString list =
-  list
-  |>List.map (fromChar << fromCode << floor << (+) 65)
-  |>List.foldr (++) ""
 
 addObject : SpaceObject -> Dict String SpaceObject -> Dict String SpaceObject
 addObject newObject objects =

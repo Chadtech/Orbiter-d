@@ -5,12 +5,12 @@ import SpaceObject exposing (..)
 import Game        exposing (Model)
 import Random      exposing (Seed)
 import Engine      exposing (..)
-import Char        exposing (fromCode)
-import String      exposing (fromChar)
-import Dict        exposing (fromList, get, Dict)
+import Dict        exposing (fromList, get)
 import List        exposing (map2, map, foldr, length)
 import Maybe       exposing (withDefault)
-import Debug       exposing (log)
+
+import Util exposing (makeUUID, bundle, getFloat)
+
 
 init : Model -> Model
 init model =
@@ -51,10 +51,6 @@ initLocalObjects seed uuid =
   in
     --{player | uuid = "40!", global = (30000, 30000)} :: [player]
     (map bundle (player :: objects) |> fromList, seed')
-
-
-bundle : SpaceObject -> (UUID, SpaceObject)
-bundle object = (object.uuid, object)
 
 makePlayer : Seed -> UUID -> (Player, Seed)
 makePlayer seed uuid =
@@ -240,29 +236,6 @@ addSpaceObject owner (objects, seed) =
     } :: objects
     )
     <|seed'
-
-getFloat : Float -> Float -> Seed -> (Float, Seed)
-getFloat i j seed = 
-  Random.step (Random.float i j) seed
-
-addToUUID : (List Float, Seed) -> (List Float, Seed)
-addToUUID (floats, seed) =
-  let (thisFloat, seed') = getFloat 0 15 seed in
-  (thisFloat :: floats, seed')
-
-makeUUID : Seed -> (String, Seed)
-makeUUID seed =
-  let
-    floats =
-      foldr (always addToUUID) ([], seed) [0..15]
-  in
-    (floatsToString (fst floats), snd floats)
-
-floatsToString : List Float -> String
-floatsToString list =
-  list
-  |>map (fromChar << fromCode << floor << (+) 65)
-  |>foldr (++) ""
 
 randomNames : List String
 randomNames =

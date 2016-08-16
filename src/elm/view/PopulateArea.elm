@@ -10,6 +10,7 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import List             exposing (map, filter)
 import Pather           exposing (root)
+import Util             exposing (layerer)
 import RenderObject
 
 populateArea : Player -> SpaceObjects -> Form -> Form
@@ -45,5 +46,3 @@ draw (position, object) =
   |>move position
   |>rotate (degrees a)
 
-layerer : List Form -> Form
-layerer = toForm << collage 1200 1200

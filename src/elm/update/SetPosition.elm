@@ -3,6 +3,7 @@ module SetPosition exposing (setPosition)
 import Types       exposing (..)
 import SpaceObject exposing (SpaceObject, SpaceObjects)
 import List        exposing (map)
+import Util        exposing (getSector, modulo, moduloAngle)
 
 setPosition : Time -> SpaceObject -> SpaceObject
 setPosition dt object =
@@ -26,16 +27,3 @@ setPosition dt object =
   , sector    = (getSector x', getSector y')
   , direction = atan2 vx vy
   }
-
-modulo : Float -> Float
-modulo f =
-  let f' = floor f in
-  (toFloat (f' % 600)) + (f - (toFloat f'))
-
-moduloAngle : Angle -> Angle
-moduloAngle a =
-  let a' = floor a in
-  (toFloat (a' % 360)) + (a - (toFloat a'))
-
-getSector : Float -> Int
-getSector f = floor (f / 600)

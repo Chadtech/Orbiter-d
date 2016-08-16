@@ -9,6 +9,7 @@ import SetThrust   exposing (setThrust)
 import SetGravity  exposing (setGravity)
 import SetWeight   exposing (setWeight)
 import Consumption exposing (consumeAir, consumeFuel)
+import Util        exposing (bundle)
 import Game        exposing (Model)
 
 handlePhysics : Time -> Model -> Model
@@ -23,7 +24,7 @@ applyPhysics : Time -> Dict String SpaceObject -> Dict String SpaceObject
 applyPhysics dt objects =
   values objects
   |>map (physics dt)
-  |>map pairWithuuid
+  |>map bundle
   |>fromList
 
 physics : Time -> SpaceObject -> SpaceObject
@@ -35,6 +36,3 @@ physics dt =
   >>setGravity dt
   >>setPosition dt
 
-pairWithuuid : SpaceObject -> (String, SpaceObject)
-pairWithuuid object =
-  (object.uuid, object)

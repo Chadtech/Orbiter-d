@@ -6,8 +6,6 @@ import Html.Events      exposing (..)
 import Components       exposing (tinyPoint)
 import Types            exposing (Msg)
 
-
-
 instructions : Html Msg
 instructions = 
   div 

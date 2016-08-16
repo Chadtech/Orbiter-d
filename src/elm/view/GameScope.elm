@@ -12,6 +12,7 @@ import Types            exposing (..)
 import SpaceObject      exposing (..)
 import RenderObject     exposing (draw)
 import PopulateArea     exposing (populateArea)
+import Util             exposing (layerer)
 
 gameScope : Player -> SpaceObjects -> Html Msg
 gameScope player objects =
@@ -112,9 +113,6 @@ smallStars pos =
   "celestia/smaller-stars"
   |>image' 601 601
   |>move pos
-
-layerer : List Form -> Form
-layerer = toForm << collage 1200 1200
 
 image' : Int -> Int -> String -> Form
 image' w h src = 

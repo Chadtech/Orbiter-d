@@ -8,6 +8,7 @@ import SpaceObject exposing (..)
 import Engine exposing (..)
 import List
 import Dict exposing (insert)
+import Util exposing (modulo, getSector)
 
 
 type alias SpaceObjectPayload =
@@ -163,11 +164,3 @@ thrusterDecoder =
     ("type" := string)
   |>list
   |>(:=) "thrusters"
-
-getSector : Float -> Int
-getSector f = floor (f / 600)
-
-modulo : Float -> Float
-modulo f =
-  let f' = floor f in
-  (toFloat (f' % 600)) + (f - (toFloat f'))
