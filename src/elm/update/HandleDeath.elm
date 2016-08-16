@@ -6,6 +6,7 @@ import SpaceObject exposing (..)
 import Dict exposing (..)
 import Maybe exposing (withDefault)
 import FellIntoPlanet exposing (fellIntoPlanet)
+import HighSpeedCollision exposing (highSpeedCollision)
 import List exposing (head)
 
 handleDeath : Model -> Model
@@ -24,42 +25,8 @@ handleDeath model =
       fellIntoPlanet model deathMessage
 
     HighSpeedCollision ->
-      let
-        player =
-          get model.playerId model.localObjects
-          |>withDefault dummyShip
-          |>\p -> 
-            { p 
-            | sprite =
-              { src        = "ship/ship-exploded"
-              , dimensions = (47, 47)
-              , area       = (138, 138)
-              , position   = (0,0)
-              }
-            , engine = 
-              { boost = False
-              , thrusters = []
-              }
-            }
+      highSpeedCollision model deathMessage
 
-        newPlayerId = 
-          model.localObjects
-          |>toList
-          |>head
-          |>withDefault (dummyShip.uuid, dummyShip)
-          |>snd
-          |> (.uuid)
-      in
-      { model
-      | localObjects =
-          let {playerId, localObjects} = model in
-          insert 
-            playerId 
-            player
-            localObjects
-      , died = True
-      , deathMessage = deathMessage
-      }
     _ -> model
 
 
