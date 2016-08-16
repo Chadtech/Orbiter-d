@@ -1,4 +1,4 @@
-module CollisionHandle exposing (handleCollisions)
+module HandleCollisions exposing (handleCollisions)
 
 import Collision   exposing (..)
 import Types       exposing (..)

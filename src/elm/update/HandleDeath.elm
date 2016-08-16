@@ -1,4 +1,4 @@
-module CheckIfDead exposing (handleDeath)
+module HandleDeath exposing (handleDeath)
 
 import Game exposing (..)
 import Types exposing (..)
