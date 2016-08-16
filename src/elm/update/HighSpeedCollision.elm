@@ -5,15 +5,16 @@ import Types exposing (..)
 import SpaceObject exposing (..)
 import Dict exposing (..)
 import Maybe exposing (withDefault)
+import Random exposing (..)
 import List exposing (head)
 
 highSpeedCollision : Model -> Model
 highSpeedCollision model =
   let
-    player =
+    (player, seed) =
       get model.playerId model.localObjects
       |>withDefault dummyShip
-      |>modifyPlayer
+      |>modifyPlayer model.seed
 
     newPlayerId = 
       model.localObjects
@@ -21,23 +22,42 @@ highSpeedCollision model =
       |>head
       |>withDefault (dummyShip.uuid, dummyShip)
       |>snd
-      |> (.uuid)
+      |>(.uuid)
   in
   { model
   | localObjects =
       let {playerId, localObjects} = model in
-      insert 
-        playerId 
-        player
-        localObjects
+      addObject localObjects player 
   , died = True
   , deathMessage = "You exploded in a high speed collision."
+  , seed = seed
   }
 
-modifyPlayer : Player -> Player
-modifyPlayer player =
+--makeDebris : Seed 
+
+getFloat : Float -> Float -> Seed -> (Float, Seed)
+getFloat i j seed =
+  Random.step (Random.float i j) seed
+
+addObject : Dict String SpaceObject -> SpaceObject -> Dict String SpaceObject
+addObject objects newObject =
+  insert newObject.uuid newObject objects
+
+modifyPlayer : Seed -> Player -> (Player, Seed)
+modifyPlayer seed player =
+  let
+    (dva, seed1) = getFloat -20 20 seed
+    (dvx, seed2) = getFloat -20 20 seed1
+    (dvy, seed3) = getFloat -20 20 seed2
+ 
+    (a, va) = player.angle
+    (vx, vy) = player.velocity
+  in
+  (,)
   { player
-  | type' = Debris
+  | angle = (a, va + dva)
+  , velocity = (vx + dvx, vy + dvy)
+  , type' = Debris
   , sprite =
     { src        = "ship/ship-exploded"
     , dimensions = (47, 47)
@@ -49,3 +69,4 @@ modifyPlayer player =
     , thrusters = []
     }
   }
+  seed3
