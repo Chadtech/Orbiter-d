@@ -9,8 +9,8 @@ import Maybe exposing (withDefault)
 import Random exposing (..)
 import Debug exposing (log)
 
-fellIntoPlanet : Model -> String ->  Model
-fellIntoPlanet model deathMessage =
+fellIntoPlanet : Model -> Model
+fellIntoPlanet model =
   let
     (newFocus, seed) =
       randomObject model
@@ -21,7 +21,7 @@ fellIntoPlanet model deathMessage =
       let {localObjects} = model in
       remove model.playerId localObjects
   , died = True
-  , deathMessage = deathMessage
+  , deathMessage = "You burnt up in the atmosphere."
   , seed = seed
   }
 

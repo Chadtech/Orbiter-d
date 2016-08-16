@@ -7,8 +7,8 @@ import Dict exposing (..)
 import Maybe exposing (withDefault)
 import List exposing (head)
 
-highSpeedCollision : Model -> String -> Model
-highSpeedCollision model deathMessage =
+highSpeedCollision : Model -> Model
+highSpeedCollision model =
   let
     player =
       get model.playerId model.localObjects
@@ -43,5 +43,5 @@ highSpeedCollision model deathMessage =
         player
         localObjects
   , died = True
-  , deathMessage = deathMessage
+  , deathMessage = "You exploded in a high speed collision."
   }
