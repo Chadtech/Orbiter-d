@@ -13,20 +13,7 @@ highSpeedCollision model =
     player =
       get model.playerId model.localObjects
       |>withDefault dummyShip
-      |>\p -> 
-        { p 
-        | type' = Debris
-        , sprite =
-          { src        = "ship/ship-exploded"
-          , dimensions = (47, 47)
-          , area       = (138, 138)
-          , position   = (0,0)
-          }
-        , engine = 
-          { boost = False
-          , thrusters = []
-          }
-        }
+      |>modifyPlayer
 
     newPlayerId = 
       model.localObjects
@@ -45,4 +32,20 @@ highSpeedCollision model =
         localObjects
   , died = True
   , deathMessage = "You exploded in a high speed collision."
+  }
+
+modifyPlayer : Player -> Player
+modifyPlayer player =
+  { player
+  | type' = Debris
+  , sprite =
+    { src        = "ship/ship-exploded"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  , engine = 
+    { boost = False
+    , thrusters = []
+    }
   }
