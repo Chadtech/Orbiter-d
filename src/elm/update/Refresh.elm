@@ -11,7 +11,6 @@ import HandleDeath exposing (handleDeath)
 import Debug exposing (log)
 import List
 
-
 refresh : Time -> Model -> Model
 refresh dt =
   handleCollisions dt

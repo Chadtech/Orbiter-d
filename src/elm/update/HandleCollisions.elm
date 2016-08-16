@@ -7,7 +7,6 @@ import Game        exposing (Model)
 import List        exposing (maximum, map, map2, concat, filter, isEmpty, foldr, append)
 import Dict        exposing (get, insert, union, values, fromList)
 import Maybe       exposing (withDefault)
-import Debug exposing (log)
 
 
 dot : Pt -> Pt -> Float

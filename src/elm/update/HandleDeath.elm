@@ -5,7 +5,7 @@ import Types exposing (..)
 import SpaceObject exposing (..)
 import Dict exposing (..)
 import Maybe exposing (withDefault)
-import Debug exposing (log)
+import FellIntoPlanet exposing (fellIntoPlanet)
 import List exposing (head)
 
 handleDeath : Model -> Model
@@ -19,29 +19,10 @@ handleDeath model =
       | died = True
       , deathMessage = deathMessage
       }
-    FellIntoPlanet ->
-      let
-        player =
-          get model.playerId model.localObjects
-          |>withDefault dummyShip
-          |> (\p -> { p | remove = True })
 
-        newPlayerId = 
-          model.localObjects
-          |>toList
-          |>head
-          |>withDefault (dummyShip.uuid, dummyShip)
-          |>snd
-          |> (.uuid)
-      in
-      { model
-      | playerId = newPlayerId
-      , localObjects =
-          let {playerId, localObjects} = model in
-          remove playerId localObjects
-      , died = True
-      , deathMessage = deathMessage
-      }
+    FellIntoPlanet ->
+      fellIntoPlanet model deathMessage
+
     HighSpeedCollision ->
       let
         player =

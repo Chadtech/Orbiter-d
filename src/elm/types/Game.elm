@@ -11,7 +11,7 @@ type alias Model =
   { localObjects  : Dict String SpaceObject
   , remoteObjects : Dict String SpaceObject
   , keys          : Keyboard.Model
-  , playerId      : String
+  , playerId      : UUID
   , died          : Bool
   , deathMessage  : String
   , ready         : Bool
