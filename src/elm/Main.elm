@@ -75,15 +75,16 @@ update msg model =
       let 
         l = length string 
 
-        isntEnter =
-          slice (l - 1) l string /= "\n"
+        isEnter =
+          String.toList string
+          |>List.any ((==) '\n')
       in
-      if isntEnter then
-        if l < 45 then
+      if isEnter then (model, Cmd.none)
+      else
+        if (length string) < 45 then
           ({model | chatInput = string}, Cmd.none)
         else 
           (model, Cmd.none)
-      else (model, Cmd.none)
 
 
 
