@@ -169,8 +169,6 @@ addSpaceObject owner (objects, seed) =
       in
       fromPolar (r', angle')
 
-
-
     sector =
       let (x, y) = cartesianCoordinates in
       (floor (x / 600), floor (y / 600))

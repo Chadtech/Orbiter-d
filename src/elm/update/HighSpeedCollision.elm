@@ -15,7 +15,8 @@ highSpeedCollision model =
       |>withDefault dummyShip
       |>\p -> 
         { p 
-        | sprite =
+        | type' = Debris
+        , sprite =
           { src        = "ship/ship-exploded"
           , dimensions = (47, 47)
           , area       = (138, 138)
