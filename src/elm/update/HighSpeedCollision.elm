@@ -52,26 +52,26 @@ listOfDebrisSprites =
     , area       = (138, 138)
     , position   = (0,0)
     }
-  , { src        = "ship/ship-exploded"
-    , dimensions = (47, 47)
-    , area       = (138, 138)
+  , { src        = "ship/ship-debris-1"
+    , dimensions = (15, 13)
+    , area       = (15, 13)
     , position   = (0,0)
     }
-  , { src        = "ship/ship-exploded"
-    , dimensions = (47, 47)
-    , area       = (138, 138)
+  , { src        = "ship/ship-debris-2"
+    , dimensions = (24, 26)
+    , area       = (24, 26)
     , position   = (0,0)
     }
-  , { src        = "ship/ship-exploded"
-    , dimensions = (47, 47)
-    , area       = (138, 138)
+  , { src        = "ship/ship-debris-3"
+    , dimensions = (24, 26)
+    , area       = (24, 26)
     , position   = (0,0)
     }
-  , { src        = "ship/ship-exploded"
-    , dimensions = (47, 47)
-    , area       = (138, 138)
-    , position   = (0,0)
-    }
+  --, { src        = "ship/ship-exploded"
+  --  , dimensions = (47, 47)
+  --  , area       = (138, 138)
+  --  , position   = (0,0)
+  --  }
   ]
 
 makeDebris : Seed -> Player -> Sprite -> (SpaceObject, Seed)
