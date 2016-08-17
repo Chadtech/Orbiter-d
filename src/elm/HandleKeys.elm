@@ -9,10 +9,38 @@ import Dict             exposing (get, insert)
 import List             exposing (map)
 import SpaceObject      exposing (..)
 import Maybe            exposing (withDefault)
+import Init             exposing (makePlayer)
 
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys model keys =
-  let {playerId, localObjects, chatInFocus} = model in
+  let 
+    {seed, playerId, localObjects, chatInFocus} = model 
+
+    chatInFocus' =
+      if isPressed Keyboard.BackQuote keys then
+        not chatInFocus
+      else
+        chatInFocus
+  in
+  if model.died then
+    if isPressed Keyboard.Enter keys then
+      let
+        (player, seed') =
+          makePlayer seed playerId
+      in
+      { model
+      | keys = keys
+      , localObjects = 
+          insert playerId player localObjects
+      , focusOn = playerId
+      , chatInFocus = chatInFocus'
+      , seed = seed'
+      , died = False
+      } 
+    else
+      { model | keys = keys }
+
+  else
   { model
   | keys = keys
   , localObjects = 

@@ -1,4 +1,4 @@
-module HighSpeedCollision exposing (highSpeedCollision)
+module RanOutOfAir exposing (ranOutOfAir)
 
 import Game exposing (..)
 import Types exposing (..)
@@ -11,14 +11,14 @@ import Char        exposing (fromCode)
 import String      exposing (fromChar)
 import Util exposing (makeUUID, getFloat, getSector, modulo)
 
-highSpeedCollision : Model -> Model
-highSpeedCollision model =
+ranOutOfAir : Model -> Model
+ranOutOfAir model =
   let
     player =
       get model.playerId model.localObjects
       |>withDefault dummyShip
 
-    (wreckedPlayer, seed) =
+    (deadPlayer, seed) =
       makeDebris model.seed player
   in
   { model
@@ -27,36 +27,28 @@ highSpeedCollision model =
         localObjects' = 
           remove player.uuid model.localObjects 
       in
-      foldr addObject localObjects'  [wreckedPlayer]
-  , focusOn = wreckedPlayer.uuid
+      foldr addObject localObjects'  [deadPlayer]
+  , focusOn = deadPlayer.uuid
   , died = True
-  , deathMessage = "You exploded in a high speed collision."
+  , deathMessage = "You ran out of air."
   , seed = seed
   }
-
-
 
 makeDebris : Seed -> Player -> (SpaceObject, Seed)
 makeDebris seed player =
   let
-    (pvx, pvy) = player.velocity
+    (vx, vy) = player.velocity
     (px, py) = player.global
-    (pa, pva) = player.angle
 
-    (a, seed0) = getFloat 0 360 seed
-    (va, seed1) = getFloat -70 70 seed0
-    (vx, seed2) = getFloat -30 30 seed1
-    (vy, seed3) = getFloat -30 30 seed2
-
-    (uuid, seed4) = makeUUID seed3
+    (uuid, seed') = makeUUID seed
   in
   (,)
-  { angle = (a + pa, va + pva)
+  { angle = player.angle
   , local = (modulo px, modulo py)
   , global = player.global
-  , velocity = (pvx + vx, pvy + vy)
+  , velocity = player.velocity
   , sector = (getSector px, getSector py)
-  , direction = atan2 (pvx + vx) (pvy + vy)
+  , direction = atan2 vx vy
   , dimensions = (34, 29)
   , fuel = 0
   , air = 0
@@ -71,7 +63,7 @@ makeDebris seed player =
     , thrusters = []
     }
   , sprite =
-    { src        = "ship/ship-exploded"
+    { src        = "ship/ship-powered-down"
     , dimensions = (47, 47)
     , area       = (138, 138)
     , position   = (0,0)
@@ -79,7 +71,7 @@ makeDebris seed player =
   , remove = False
   , explode = False 
   }
-  seed4
+  seed'
 
 addObject : SpaceObject -> Dict String SpaceObject -> Dict String SpaceObject
 addObject newObject objects =

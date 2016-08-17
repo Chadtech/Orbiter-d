@@ -1,4 +1,4 @@
-module Init exposing (init)
+module Init exposing (init, makePlayer)
 
 import Types       exposing (..)
 import SpaceObject exposing (..)

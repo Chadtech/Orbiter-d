@@ -7,6 +7,7 @@ import Dict exposing (..)
 import Maybe exposing (withDefault)
 import FellIntoPlanet exposing (fellIntoPlanet)
 import HighSpeedCollision exposing (highSpeedCollision)
+import RanOutOfAir exposing (ranOutOfAir)
 import List exposing (head)
 
 handleDeath : Model -> Model
@@ -16,10 +17,7 @@ handleDeath model =
   let deathState = checkIfDead model in
   case deathState of
     RanOutOfAir ->
-      { model
-      | died = True
-      , deathMessage = "You ran out of air."
-      }
+      ranOutOfAir model
 
     FellIntoPlanet ->
       fellIntoPlanet model
@@ -42,8 +40,8 @@ checkIfDead {playerId, localObjects} =
     |>notExploded player
 
 notExploded : Player -> DeathState -> DeathState
-notExploded player state =
-  if player.explode then HighSpeedCollision
+notExploded {explode} state =
+  if explode then HighSpeedCollision
   else state
 
 isThereAir : Player -> DeathState -> DeathState

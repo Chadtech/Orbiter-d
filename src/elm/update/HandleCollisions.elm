@@ -139,8 +139,10 @@ applyCollisions dt playersId objects =
 
 markRemove : SpaceObject -> SpaceObject
 markRemove object = 
-  if object.type' == Ship then object
-  else { object | remove = True }
+  case object.type' of
+    Ship -> object
+    Debris -> object
+    _ -> { object | remove = True }
 
 getPlayer : UUID -> SpaceObjects -> Player
 getPlayer uuid objects =
