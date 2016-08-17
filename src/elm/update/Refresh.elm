@@ -48,10 +48,12 @@ isLocal owner object =
   object.owner == owner
 
 tooClose : SpaceObject -> Bool
-tooClose {global} =
-  let
-    (x,y) = global
-    x' = x - 60000
-    y' = y - 60000
-  in
-  (sqrt (x'^2 + y'^2)) < 5000
+tooClose {global, type'} =
+  if type' /= Ship then
+    let
+      (x,y) = global
+      x' = x - 60000
+      y' = y - 60000
+    in
+    (sqrt (x'^2 + y'^2)) < 5000
+  else False
