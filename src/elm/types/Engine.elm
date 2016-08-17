@@ -11,6 +11,7 @@ type ThrusterType
   | SideRight
   | BackLeft
   | BackRight
+  | MissileMain
 
 type alias Engine = 
   { boost : Bool

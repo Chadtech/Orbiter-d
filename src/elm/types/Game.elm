@@ -21,6 +21,7 @@ type alias Model =
   , chatMessages  : List ChatMessage
   , seed          : Random.Seed
   , chatInFocus   : Bool
+  , fireIsDown    : Bool
   }
 
 init : Model
@@ -38,6 +39,7 @@ init =
   , chatMessages  = []
   , seed          = Random.initialSeed 0
   , chatInFocus   = False
+  , fireIsDown    = False
   }
 
 

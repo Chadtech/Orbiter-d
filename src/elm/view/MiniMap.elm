@@ -8,8 +8,10 @@ import Element          exposing (..)
 import Transform        exposing (..)
 import Types            exposing (Msg, Coordinate)
 import SpaceObject      exposing (SpaceObject, SpaceObjects, Player)
-import List             exposing (append, map)
+import List             exposing (append, map, maximum)
 import Pather           exposing (root)
+import Maybe exposing (withDefault)
+import Debug exposing (log)
 
 miniMap : Player -> SpaceObjects -> Html Msg
 miniMap {global} objects =
@@ -40,12 +42,18 @@ draw : SpaceObject -> Form
 draw {sprite, angle, global} =
   let
     (w,h) = sprite.dimensions
+    w'    = if 2 > w // 10 then 2 else w // 10
+    h'    = if 2 > h // 10 then 2 else h // 10
     a     = fst angle
   in
   sprite.src
-  |>image' (w // 10) (h // 10)
+  |>image' w' h'
   |>rotate (degrees a)
   |>move (position global)
+
+min : List Int -> Int
+min =
+  maximum >> withDefault 1
 
 image' : Int -> Int -> String -> Form
 image' w h src = 

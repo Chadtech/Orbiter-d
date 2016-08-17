@@ -13,7 +13,7 @@ import Engine           exposing (..)
 
 
 draw : SpaceObject -> Form
-draw {engine, sprite} =
+draw {engine, sprite, fuel} =
   let
     {dimensions, area, src} = sprite
     bodySprite = 
@@ -23,12 +23,18 @@ draw {engine, sprite} =
     {boost, thrusters} = engine
   in 
     thrusters
+    |>isEvenAnyFuel (fuel > 0)
     |>filter isFiring
     |>map (drawThruster boost)
     |>(::) bodySprite
     |>reverse
     |>collage w h
     |>toForm
+
+isEvenAnyFuel : Bool -> List Thruster -> List Thruster
+isEvenAnyFuel anyFuel thrusters =
+  if anyFuel then thrusters
+  else []
 
 isFiring : Thruster -> Bool
 isFiring thruster = 0 /= thruster.firing
@@ -63,6 +69,8 @@ drawThruster boost {type'} =
     BackRight ->
       thruster' (2, 9) (20, -9) "yaw"
       |>turn
+    MissileMain ->
+      move (0, -11) <| image' 5 14 <| "blasts/missile-blast"
 
 image' : Int -> Int -> String -> Form
 image' w h src = 

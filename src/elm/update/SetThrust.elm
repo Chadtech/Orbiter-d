@@ -57,6 +57,7 @@ calculateThrust boost angle massFactor {type'} =
     dvx =
       case type' of
         Main        -> -mainsPower * (sin' angle)
+        MissileMain -> -3 * (sin' angle)
         FrontLeft   -> sin' angle
         FrontRight  -> sin' angle
         SideLeft    -> -(cos' angle)
@@ -67,6 +68,7 @@ calculateThrust boost angle massFactor {type'} =
     dvy =
       case type' of
         Main       -> mainsPower * (cos' angle)
+        MissileMain -> 3 * (cos' angle)
         FrontLeft  -> -(cos' angle)
         FrontRight -> -(cos' angle)
         SideLeft   -> -(sin' angle)

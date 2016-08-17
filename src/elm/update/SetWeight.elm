@@ -7,5 +7,5 @@ setWeight object =
   let {fuel, air, missiles} = object in
   { object 
   | mass = (
-    fuel / 1.7) + air + 263 + (toFloat missiles * 100)
+    fuel / 1.7) + air + 263 + (toFloat missiles * 200)
   }
