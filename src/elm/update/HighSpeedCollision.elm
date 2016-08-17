@@ -18,8 +18,11 @@ highSpeedCollision model =
       get model.playerId model.localObjects
       |>withDefault dummyShip
 
-    (wreckedPlayer, seed) =
-      makeDebris model.seed player
+    --(wreckedPlayer, seed) =
+    --  makeDebris model.seed player
+
+    (debris, seed1) =
+      foldr (addDebris player) ([], model.seed) listOfDebrisSprites
   in
   { model
   | localObjects =
@@ -27,17 +30,52 @@ highSpeedCollision model =
         localObjects' = 
           remove player.uuid model.localObjects 
       in
-      foldr addObject localObjects'  [wreckedPlayer]
-  , focusOn = wreckedPlayer.uuid
+      foldr addObject localObjects' debris
+  , focusOn = (head debris |> withDefault dummyShip).uuid
   , died = True
   , deathMessage = "You exploded in a high speed collision."
-  , seed = seed
+  , seed = seed1
   }
 
+addDebris : Player -> Sprite -> (SpaceObjects, Seed) -> (SpaceObjects, Seed) 
+addDebris player sprite (objects, seed0) =
+  let
+    (debris, seed1) = 
+      makeDebris seed0 player sprite
+  in
+    (debris :: objects, seed1)
 
+listOfDebrisSprites : List Sprite
+listOfDebrisSprites =
+  [ { src        = "ship/ship-exploded"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  , { src        = "ship/ship-exploded"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  , { src        = "ship/ship-exploded"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  , { src        = "ship/ship-exploded"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  , { src        = "ship/ship-exploded"
+    , dimensions = (47, 47)
+    , area       = (138, 138)
+    , position   = (0,0)
+    }
+  ]
 
-makeDebris : Seed -> Player -> (SpaceObject, Seed)
-makeDebris seed player =
+makeDebris : Seed -> Player -> Sprite -> (SpaceObject, Seed)
+makeDebris seed player sprite =
   let
     (pvx, pvy) = player.velocity
     (px, py) = player.global
@@ -70,12 +108,7 @@ makeDebris seed player =
     { boost = False
     , thrusters = []
     }
-  , sprite =
-    { src        = "ship/ship-exploded"
-    , dimensions = (47, 47)
-    , area       = (138, 138)
-    , position   = (0,0)
-    }
+  , sprite = sprite
   , remove = False
   , explode = False 
   }

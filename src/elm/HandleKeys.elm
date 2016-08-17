@@ -72,7 +72,6 @@ insertMissile model =
         (seed, foldr addObject model.localObjects [ player', missile ])
     else
       (model.seed, model.localObjects)
-    --insert player.uuid player model.localObjects
 
 makeMissile : Seed -> Player -> (SpaceObject, Seed)
 makeMissile seed player =
