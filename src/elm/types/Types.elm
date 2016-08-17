@@ -15,7 +15,7 @@ type alias Boost      = Bool
 
 type Msg 
   = Refresh Time
-  | HandleKeys Keyboard.Msg
+  | UpdateKeys Keyboard.Msg
   | PopulateFromRandomness Time
   | UpdateName String
   | UpdateChatInput String

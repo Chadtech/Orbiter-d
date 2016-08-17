@@ -5,7 +5,7 @@ import AnimationFrame   exposing (..)
 import Keyboard.Extra   as Keyboard
 import Game             exposing (Model)
 import Types            exposing (..)
-import HandleKeys       exposing (handleKeys)
+import UpdateKeys       exposing (handleKeys)
 import View             exposing (view)
 import SetPlayersName   exposing (setPlayersName)
 import Dict             exposing (toList)
@@ -36,7 +36,7 @@ subscriptions : Model -> Sub Msg
 subscriptions {ready} =
   if ready then
     Sub.batch
-    [ Sub.map HandleKeys Keyboard.subscriptions
+    [ Sub.map UpdateKeys Keyboard.subscriptions
     , diffs Refresh
     , WebSocket.listen "ws://ctuniverse.zrg.cc/ws" WSRecieve
     ]
@@ -53,12 +53,12 @@ update msg model =
     Refresh dt ->
       (refresh (rate dt) model, Cmd.none)
 
-    HandleKeys keyMsg ->
+    UpdateKeys keyMsg ->
       let
         (keys, kCmd) = 
           Keyboard.update keyMsg model.keys
       in
-        (handleKeys model keys, Cmd.map HandleKeys kCmd)
+        (handleKeys model keys, Cmd.map UpdateKeys kCmd)
 
     PopulateFromRandomness time ->
       let time' = floor time in
