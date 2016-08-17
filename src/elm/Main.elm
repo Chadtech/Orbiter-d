@@ -72,6 +72,12 @@ update msg model =
         (handleMessageSubmit model, Cmd.none)
       else (model, Cmd.none)
 
+    FocusOnChat ->
+      ({model | chatInFocus = True}, Cmd.none)
+
+    FocusOnGame ->
+      ({model | chatInFocus = False}, Cmd.none)
+
     UpdateChatInput string ->
       let 
         is' = is string

@@ -43,6 +43,8 @@ chatInputField input' =
   [ id "chat-input-box"
   , value input'
   , class "chat-input" 
+  , onFocus FocusOnChat
+  , onBlur FocusOnGame
   , onInput UpdateChatInput
   , on "keydown" <| Json.map CheckForEnter keyCode
   , placeholder "press '~' to chat"

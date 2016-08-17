@@ -26,8 +26,8 @@ type alias Model =
 
 init : Model
 init =
-  { localObjects  = fromList []
-  , remoteObjects = fromList []
+  { localObjects  = Dict.empty
+  , remoteObjects = Dict.empty
   , keys          = fst Keyboard.init
   , playerId      = ""
   , playerName    = ""

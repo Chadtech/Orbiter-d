@@ -21,6 +21,8 @@ type Msg
   | UpdateChatInput String
   | CheckForEnter Int
   | WSRecieve String
+  | FocusOnChat
+  | FocusOnGame
 
 type alias Sprite =
   { dimensions : Dimensions

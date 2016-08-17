@@ -34,7 +34,7 @@ normalConditions : Keyboard.Model -> Model -> Model
 normalConditions keys model =
   let 
     (seed, localObjects) =
-      if isPressed Keyboard.CharG keys then
+      if isPressed Keyboard.CharG keys && (not model.chatInFocus) then
         insertMissile model
       else (model.seed, model.localObjects)
   in
@@ -149,7 +149,6 @@ resetGame keys model =
   , localObjects = 
       insert playerId player localObjects
   , focusOn = playerId
-  --, chatInFocus = chatInFocus'
   , seed = seed'
   , died = False
   } 
