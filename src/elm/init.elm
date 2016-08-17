@@ -40,7 +40,7 @@ initLocalObjects : Seed -> UUID -> (SpaceObjectDict, Seed)
 initLocalObjects seed uuid =
   let
     (player, seed') = 
-      makePlayer seed uuid
+      makePlayer seed uuid ""
 
     (objects, seed'') =
       foldr 
@@ -52,8 +52,8 @@ initLocalObjects seed uuid =
     --{player | uuid = "40!", global = (30000, 30000)} :: [player]
     (map bundle (player :: objects) |> fromList, seed')
 
-makePlayer : Seed -> UUID -> (Player, Seed)
-makePlayer seed uuid =
+makePlayer : Seed -> UUID -> Name -> (Player, Seed)
+makePlayer seed uuid name =
   let
     r     = getFloat 7000 55000 seed
     angle = getFloat 0 359 (snd r)
@@ -110,7 +110,9 @@ makePlayer seed uuid =
   , mass        = 852
   , missiles    = 5
   , type'       = Ship
-  , name        = playersName
+  , name        = 
+      if name == "" then playersName
+      else name
   , uuid        = uuid
   , owner       = uuid
   , engine      =

@@ -5,7 +5,7 @@ import AnimationFrame   exposing (..)
 import Keyboard.Extra   as Keyboard
 import Game             exposing (Model)
 import Types            exposing (..)
-import UpdateKeys       exposing (handleKeys)
+import HandleKeys       exposing (handleKeys)
 import View             exposing (view)
 import SetPlayersName   exposing (setPlayersName)
 import Dict             exposing (toList)

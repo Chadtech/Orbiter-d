@@ -26,7 +26,7 @@ handleKeys model keys =
     if isPressed Keyboard.Enter keys then
       let
         (player, seed') =
-          makePlayer seed playerId
+          makePlayer seed playerId model.playerName
       in
       { model
       | keys = keys
