@@ -9,10 +9,49 @@ import Dict exposing (..)
 import Maybe exposing (withDefault)
 import HandleDeath exposing (handleDeath)
 import Debug exposing (log)
+import Util exposing (bundle)
 import List
 
 refresh : Time -> Model -> Model
 refresh dt =
   handleCollisions dt
+  >>checkIfTooClose
   >>handleDeath
   >>handlePhysics dt
+
+
+checkIfTooClose : Model -> Model
+checkIfTooClose model =
+  let
+    objects =
+      union 
+        model.localObjects
+        model.remoteObjects
+      |>values
+      |>List.filter (tooClose >> not)
+  in
+  { model
+  | localObjects =
+      objects
+      |>List.filter (isLocal model.playerId)
+      |>List.map bundle
+      |>fromList
+  , remoteObjects =
+      objects
+      |>List.filter (isLocal model.playerId >> not)
+      |>List.map bundle
+      |>fromList
+  }
+
+isLocal : UUID -> SpaceObject -> Bool
+isLocal owner object =
+  object.owner == owner
+
+tooClose : SpaceObject -> Bool
+tooClose {global} =
+  let
+    (x,y) = global
+    x' = x - 60000
+    y' = y - 60000
+  in
+  (sqrt (x'^2 + y'^2)) < 5000

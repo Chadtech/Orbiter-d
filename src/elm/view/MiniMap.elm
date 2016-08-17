@@ -42,8 +42,8 @@ draw : SpaceObject -> Form
 draw {sprite, angle, global} =
   let
     (w,h) = sprite.dimensions
-    w'    = if 2 > w // 10 then 2 else w // 10
-    h'    = if 2 > h // 10 then 2 else h // 10
+    w'    = if 1 > w // 10 then 1 else w // 10
+    h'    = if 1 > h // 10 then 1 else h // 10
     a     = fst angle
   in
   sprite.src
