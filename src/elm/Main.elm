@@ -18,7 +18,8 @@ import HandleMessageSubmit    exposing (handleMessageSubmit)
 import HandleWebSocketMessage exposing (handleWebSocketMessage)
 import Refresh                exposing (refresh)
 import WebSocket
-
+import Dom
+import Task
 
 rate : Time -> Time
 rate dt = dt / 240
@@ -73,19 +74,20 @@ update msg model =
 
     UpdateChatInput string ->
       let 
-        isEnter =
-          String.toList string
-          |>List.any ((==) '\n')
+        is' = is string
+        isEnter = is' '\n'
+        isSquiggle = is' '`'
       in
-      if isEnter then (model, Cmd.none)
+      if isEnter || isSquiggle then (model, Cmd.none)
       else
         if (length string) < 45 then
           ({model | chatInput = string}, Cmd.none)
         else 
           (model, Cmd.none)
 
-
-
+is : String -> Char -> Bool
+is string char =
+  String.toList string |> List.any ((==) char)
 
 
 

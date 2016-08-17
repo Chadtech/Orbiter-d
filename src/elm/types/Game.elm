@@ -20,6 +20,7 @@ type alias Model =
   , chatInput     : String
   , chatMessages  : List ChatMessage
   , seed          : Random.Seed
+  , chatInFocus   : Bool
   }
 
 init : Model
@@ -36,6 +37,7 @@ init =
   , chatInput     = ""
   , chatMessages  = []
   , seed          = Random.initialSeed 0
+  , chatInFocus   = False
   }
 
 

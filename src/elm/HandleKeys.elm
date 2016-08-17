@@ -12,17 +12,24 @@ import Maybe            exposing (withDefault)
 
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys model keys =
-  let {playerId, localObjects} = model in
+  let {playerId, localObjects, chatInFocus} = model in
   { model
   | keys = keys
   , localObjects = 
-      let
-        player = 
-          get playerId localObjects
-          |>withDefault dummyShip
-          |>setEngine keys
-      in
-      insert playerId player localObjects
+      if chatInFocus then localObjects
+      else
+        let
+          player = 
+            get playerId localObjects
+            |>withDefault dummyShip
+            |>setEngine keys
+        in
+          insert playerId player localObjects
+  , chatInFocus =
+      if isPressed Keyboard.BackQuote keys then
+        not chatInFocus
+      else
+        model.chatInFocus
   }
 
 setEngine : Keyboard.Model -> Player -> Player

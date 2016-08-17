@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Keyboard.Extra as Keyboard
 import Time
+import Dom
 
 type alias Time       = Float
 type alias Angle      = Float

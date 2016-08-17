@@ -40,7 +40,8 @@ chatMessagesList =
 chatInputField : String -> Html Msg
 chatInputField input' =
   textarea
-  [ value input'
+  [ id "chat-input-box"
+  , value input'
   , class "chat-input" 
   , onInput UpdateChatInput
   , on "keydown" <| Json.map CheckForEnter keyCode
