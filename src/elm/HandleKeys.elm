@@ -59,13 +59,10 @@ insertMissile model =
       get model.playerId model.localObjects
       |>withDefault dummyShip
   in
-    if player.missiles > 0 && player.fuel > 0 then
+    if player.missiles > 0 then
       let
         player' =
-          { player 
-          | missiles = player.missiles - 1 
-          , fuel = player.fuel - 3
-          }
+          { player | missiles = player.missiles - 1 }
         (missile, seed) =
           makeMissile model.seed player' 
       in

@@ -8,8 +8,7 @@ import Engine      exposing (..)
 import Dict        exposing (fromList, get)
 import List        exposing (map2, map, foldr, length)
 import Maybe       exposing (withDefault)
-
-import Util exposing (makeUUID, bundle, getFloat)
+import Util        exposing (makeUUID, bundle, getFloat)
 
 
 init : Model -> Model
@@ -46,10 +45,8 @@ initLocalObjects seed uuid =
       foldr 
         (always (addSpaceObject uuid)) 
         ([], seed')
-        --[]
         [0..15]
   in
-    --{player | uuid = "40!", global = (30000, 30000)} :: [player]
     (map bundle (player :: objects) |> fromList, seed')
 
 makePlayer : Seed -> UUID -> Name -> (Player, Seed)
@@ -141,16 +138,16 @@ makePlayer seed uuid name =
 addSpaceObject : UUID -> (SpaceObjects, Seed) -> (SpaceObjects, Seed)
 addSpaceObject owner (objects, seed) =
   let
-    r     = getFloat 7000 55000 seed
+    r     = getFloat 7000 45000 seed
     angle = getFloat 0 359 (snd r)
-    va    = getFloat -70 70 (snd angle)
+    va    = getFloat -60 60 (snd angle)
 
     cartesianCoordinates =
       let (x, y) = fromPolar ((fst r), degrees (fst angle)) in
       (x + 60000, y + 60000)
 
-    vx' = getFloat -70 70 (snd va)
-    vy' = getFloat -70 70 (snd vx')
+    vx' = getFloat -60 60 (snd va)
+    vy' = getFloat -60 60 (snd vx')
 
     clockwiseOrbit = 
       (fst (getFloat 0 1 (snd vy'))) > 0.5

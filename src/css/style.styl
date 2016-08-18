@@ -47,8 +47,17 @@ body
     color importanterText
   &.critical
     color critical
+  &.ignorable
+    color ignorable
   &.very-ignorable
     color veryIgnorable
+  &.blink
+    animation-duration 800ms 
+    animation-name blinkText 
+    animation-iteration-count infinite
+    animation-direction alternate 
+    -webkit-animation blinkText 800ms infinite
+    -webkit-animation-timing-function steps(2,end)
     
 .root
   width  100%
@@ -303,5 +312,17 @@ body
     border-color      pointColor
   to 
     border-color      critical
+    
+@keyframes blinkText 
+  from 
+    color      pointColor
+  to 
+    color      critical
+  
+@-webkit-keyframes blinkText 
+  from 
+    color      pointColor
+  to 
+    color      critical
   
   

@@ -14,19 +14,19 @@ import String           exposing (slice, length)
 readOut : Player -> Html Msg
 readOut player =
   let
-    (keys, values) = content player
+    (left, right) = content player
   in
   div
   [ class "read-out-container" ]
-  [ column (map point keys)
-  , column (map point values)
+  [ column left
+  , column right
   ]
 
 column : List (Html Msg) -> Html Msg
 column list =
   div [ class "read-out-column" ] list
 
-content : Player -> (List String, List String)
+content : Player -> (List (Html Msg), List (Html Msg))
 content player =
   let 
     (x,y)    = player.global 
@@ -44,24 +44,40 @@ content player =
         "NO NAME!"
   in
   unzip
-  [ "READ OUT"  . name'
-  , "--------"  . "--------"
-  , "STATUS"    . "NOMINAL"
-  , "--inv"     . "--------"
-  , "FUEL"      . ((nf 6 (oneDecimal fuel))   ++ "l")
-  , "AIR"       . ((nf 6 (oneDecimal air)) ++ "l")
-  , "POWER"     . "unavaila"
-  , "MASS"      . ((nf 6 (oneDecimal mass)) ++ " yH")
-  , "MISSILES"  . (toString missiles)
-  , "--pos"     . "--------"
-  , "rpms "     . (nf 4 (-va * (10/9)))
-  , "dir"       . (angleFormat (direction / pi * 200))
-  , ": angle"   . (angleFormat (-a / 0.9))
-  , ": x"       . toString (sx - 100)
-  , ": y"       . toString (sy - 100)
+  [ ( ignorablePoint "READ OUT"  , ignorablePoint name')
+  , ( ignorablePoint "--------"  , ignorablePoint "--------" )
+  , status player
+  , ( ignorablePoint "--inv"     , ignorablePoint "--------" )
+  , ( ignorablePoint "FUEL"      , ignorablePoint ((nf 6 (oneDecimal fuel))   ++ "l"))
+  , ( ignorablePoint "AIR"       , ignorablePoint ((nf 6 (oneDecimal air)) ++ "l"))
+  , ( ignorablePoint "POWER"     , ignorablePoint "unavaila")
+  , ( ignorablePoint "MASS"      , ignorablePoint ((nf 6 (oneDecimal mass)) ++ " yH") )
+  , ( ignorablePoint "MISSILES"  , ignorablePoint (toString missiles) )
+  , ( ignorablePoint "--pos"     , ignorablePoint "--------" )
+  , ( ignorablePoint "rpms "     , ignorablePoint (nf 4 (-va * (10/9))) )
+  , ( ignorablePoint "dir"       , ignorablePoint (angleFormat (direction / pi * 200)) )
+  , ( ignorablePoint ": angle"   , ignorablePoint (angleFormat (-a / 0.9)) )
+  , ( ignorablePoint ": x"       , ignorablePoint (toString (sx - 100)) )
+  , ( ignorablePoint ": y"       , ignorablePoint (toString (sy - 100)) )
   ]
 
-(.) = (,)
+status : Player -> (Html Msg, Html Msg)
+status player =
+  if 40 > player.air then 
+    if 0 >= player.air then
+      (criticalPoint "STATUS", criticalPoint "NO AIR")
+    else
+      (blinkingPoint "STATUS", blinkingPoint "LOW AIR")
+  else
+  if 300 > player.fuel then 
+    if 0 >= player.fuel then
+      (criticalPoint "STATUS", criticalPoint "NO FUEL")
+    else
+      (blinkingPoint "STATUS", blinkingPoint "LOW FUEL")
+  else 
+    (ignorablePoint "NOMINAL", ignorablePoint "NOMINAL")
+
+
 
 angleFormat : Float -> String
 angleFormat =

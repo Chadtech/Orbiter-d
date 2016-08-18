@@ -10,6 +10,10 @@ point : String -> Html Msg
 point s = 
   p [ class "point" ] [ text s ]
 
+blinkingPoint : String -> Html Msg
+blinkingPoint s =
+  p [ class "point blink" ] [ text s ]
+
 tinyPoint : String -> Html Msg
 tinyPoint s =
   p [ class "point tiny" ] [ text s ]
@@ -17,3 +21,11 @@ tinyPoint s =
 veryIgnorablePoint : String -> Html Msg
 veryIgnorablePoint s =
   p [ class "point very-ignorable" ] [ text s ]
+
+ignorablePoint : String -> Html Msg
+ignorablePoint s =
+  p [ class "point ignorable" ] [ text s ]
+
+criticalPoint : String -> Html Msg
+criticalPoint s = 
+  p [ class "point critical" ] [ text s ]
