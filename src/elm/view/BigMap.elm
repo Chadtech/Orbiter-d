@@ -1,4 +1,4 @@
-module MiniMap exposing (miniMap)
+module BigMap exposing (bigMap)
 
 import Html             exposing (..)
 import Html.Attributes  exposing (..)
@@ -11,38 +11,39 @@ import SpaceObject      exposing (SpaceObject, SpaceObjects, Player)
 import List             exposing (append, map, maximum)
 import Util             exposing (root)
 import Maybe            exposing (withDefault)
+import Debug exposing (log)
 
-miniMap : Player -> SpaceObjects -> Html Msg
-miniMap {global} objects =
+bigMap : Player -> SpaceObjects -> Html Msg
+bigMap {global} objects =
   div
-  [ class "mini-map-container" ]
+  [ class "big-map-container" ]
   [ append
     [ "celestia/real-stars"
-      |>image' 80 63
+      |>image' 240 189
       |>alpha 0.2
       |>rotate (degrees 0)
       |>move (-50, 0)
     , "markers/ring"
-      |>image' 5 5
+      |>image' 15 15
       |>move (position global)
     , "celestia/planet"
-      |>image' 15 15
+      |>image' 45 45
     ]
     (map draw objects)
-    |>collage 222 222 
+    |>collage 600 600 
     |>toHtml
   ]
 
 position : Coordinate -> Coordinate
 position (x,y) =
-  ((x * 0.00185) - 111, (y * 0.00185) - 111)
+  ((x * 0.005) - 300, (y * 0.005) - 300)
 
 draw : SpaceObject -> Form
 draw {sprite, angle, global} =
   let
     (w,h) = sprite.dimensions
-    w'    = if 1 > w // 10 then 1 else w // 10
-    h'    = if 1 > h // 10 then 1 else h // 10
+    w'    = if 1 > w // 3 then 1 else w // 3
+    h'    = if 1 > h // 3 then 1 else h // 3
     a     = fst angle
   in
   sprite.src

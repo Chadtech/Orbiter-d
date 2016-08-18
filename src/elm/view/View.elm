@@ -4,7 +4,7 @@ import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Game             exposing (Model)
-import SpaceObject      exposing (dummyShip, SpaceObject, SpaceObjects, Player)
+import SpaceObject      exposing (SpaceObject, SpaceObjects, Player)
 import Types            exposing (..)
 import KeyDiagram       exposing (keyDiagram, keyExample)
 import Instructions     exposing (instructions)
@@ -14,14 +14,13 @@ import GameScope        exposing (gameScope)
 import NavMarkers       exposing (navMarkers)
 import VelocityGauge    exposing (velocityGauge)
 import ChatRoom         exposing (chatroom)
+import BigMap           exposing (bigMap)
 import Died             exposing (diedNotice)
 import Components       exposing (veryIgnorablePoint)
 import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
 import List             exposing (filter, append, map)
 import Util             exposing (elseDummy)
-
-import Debug exposing (log)
 
 view : Model -> Html Msg
 view model =
@@ -42,11 +41,11 @@ view model =
       , keyExample
       ]
     , chatroom model
-    , ifBigMapUp bigMapUp
-    <| div
+    , if bigMapUp then bigMap player objects
+      else
+      div
       [ class "game-view" ]
-      [ if bigMapUp then (span [] [])
-        else gameScope player objects 
+      [ gameScope player objects 
       , navMarkers player objects
       , velocityGauge player
       , diedNotice model.died model.deathMessage
