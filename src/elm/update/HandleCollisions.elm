@@ -7,7 +7,7 @@ import Game        exposing (Model)
 import List        exposing (maximum, map, map2, concat, filter, foldr)
 import Dict        exposing (get, insert, union, values, fromList)
 import Maybe       exposing (withDefault)
-import Util        exposing (bundle)
+import Util        exposing (bundle, isLocal)
 
 
 dot : Pt -> Pt -> Float
@@ -228,11 +228,4 @@ seperateObjects uuid objects =
 dictOutput : (SpaceObject -> Bool) -> SpaceObjects ->  SpaceObjectDict
 dictOutput filter' objects =
   fromList <| List.map bundle <| List.filter filter' objects
-
-isLocal : UUID -> SpaceObject -> Bool
-isLocal playersId object =
-  playersId == object.owner
-
-
-
 

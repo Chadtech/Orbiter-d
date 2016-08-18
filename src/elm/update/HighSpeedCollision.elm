@@ -1,15 +1,15 @@
 module HighSpeedCollision exposing (highSpeedCollision)
 
-import Game exposing (..)
-import Types exposing (..)
+import Game        exposing (..)
+import Types       exposing (..)
 import SpaceObject exposing (..)
-import Dict exposing (toList, Dict, get, insert, remove)
-import Maybe exposing (withDefault)
-import Random exposing (..)
-import List exposing (head, repeat, foldr)
+import Dict        exposing (toList, Dict, get, insert, remove)
+import Maybe       exposing (withDefault)
+import Random      exposing (..)
+import List        exposing (head, repeat, foldr)
 import Char        exposing (fromCode)
 import String      exposing (fromChar)
-import Util exposing (makeUUID, getFloat, getSector, modulo)
+import Util        exposing (addObject, makeUUID, getFloat, getSector, modulo)
 
 highSpeedCollision : Model -> Model
 highSpeedCollision model =
@@ -18,11 +18,12 @@ highSpeedCollision model =
       get model.playerId model.localObjects
       |>withDefault dummyShip
 
-    --(wreckedPlayer, seed) =
-    --  makeDebris model.seed player
-
     (debris, seed1) =
-      foldr (addDebris player) ([], model.seed) listOfDebrisSprites
+      foldr 
+        (addDebris player) 
+        ([], model.seed) 
+        listOfDebrisSprites
+  
   in
   { model
   | localObjects =
@@ -119,6 +120,3 @@ makeDebris seed player sprite =
   }
   seed4
 
-addObject : SpaceObject -> Dict String SpaceObject -> Dict String SpaceObject
-addObject newObject objects =
-  insert newObject.uuid newObject objects

@@ -22,6 +22,7 @@ type alias Model =
   , seed          : Random.Seed
   , chatInFocus   : Bool
   , fireIsDown    : Bool
+  , bigMapUp      : Bool
   }
 
 init : Model
@@ -40,6 +41,7 @@ init =
   , seed          = Random.initialSeed 0
   , chatInFocus   = False
   , fireIsDown    = False
+  , bigMapUp      = False
   }
 
 

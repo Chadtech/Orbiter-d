@@ -1,15 +1,14 @@
 module Refresh exposing (refresh)
 
-import Game exposing (..)
-import Types exposing (..)
-import HandlePhysics    exposing (handlePhysics)
-import HandleCollisions  exposing (handleCollisions)
-import SpaceObject exposing (..)
-import Dict exposing (..)
-import Maybe exposing (withDefault)
-import HandleDeath exposing (handleDeath)
-import Debug exposing (log)
-import Util exposing (bundle)
+import Game               exposing (..)
+import Types              exposing (..)
+import HandlePhysics      exposing (handlePhysics)
+import HandleCollisions   exposing (handleCollisions)
+import SpaceObject        exposing (..)
+import Dict               exposing (..)
+import Maybe              exposing (withDefault)
+import HandleDeath        exposing (handleDeath)
+import Util               exposing (bundle, isLocal)
 import List
 
 refresh : Time -> Model -> Model
@@ -42,10 +41,6 @@ checkIfTooClose model =
       |>List.map bundle
       |>fromList
   }
-
-isLocal : UUID -> SpaceObject -> Bool
-isLocal owner object =
-  object.owner == owner
 
 tooClose : SpaceObject -> Bool
 tooClose {global, type'} =

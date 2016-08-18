@@ -54,4 +54,8 @@ chatInputField input' =
 
 eachMessage : ChatMessage -> Html Msg
 eachMessage {content, speaker} =
-  tinyPoint (speaker ++ " : " ++ content)
+  p 
+  [ class "point tiny ignorable" ] 
+  [ text (speaker ++ " : " ++ content) ]
+
+  

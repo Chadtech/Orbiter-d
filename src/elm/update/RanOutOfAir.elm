@@ -1,15 +1,15 @@
 module RanOutOfAir exposing (ranOutOfAir)
 
-import Game exposing (..)
-import Types exposing (..)
+import Game        exposing (..)
+import Types       exposing (..)
 import SpaceObject exposing (..)
-import Dict exposing (toList, Dict, get, insert, remove)
-import Maybe exposing (withDefault)
-import Random exposing (..)
-import List exposing (head, repeat, foldr)
+import Dict        exposing (toList, Dict, get, insert, remove)
+import Maybe       exposing (withDefault)
+import Random      exposing (..)
+import List        exposing (head, repeat, foldr)
 import Char        exposing (fromCode)
 import String      exposing (fromChar)
-import Util exposing (makeUUID, getFloat, getSector, modulo)
+import Util        exposing (addObject, makeUUID, getFloat, getSector, modulo)
 
 ranOutOfAir : Model -> Model
 ranOutOfAir model =
@@ -72,7 +72,3 @@ makeDebris seed player =
   , explode = False 
   }
   seed'
-
-addObject : SpaceObject -> Dict String SpaceObject -> Dict String SpaceObject
-addObject newObject objects =
-  insert newObject.uuid newObject objects

@@ -5,7 +5,7 @@ import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Types            exposing (..)
 import SpaceObject      exposing (Player)
-import Components       exposing (point)
+import Components       exposing (..)
 import String           exposing (slice)
 
 velocityGauge : Player -> Html Msg
@@ -14,19 +14,22 @@ velocityGauge {velocity} =
     (vx, vy)  = velocity
     velocity' = (sqrt (vx^2 + vy^2))/10
     urgency = 
-      if 20 > velocity' then 
-        ""
+      if 30 > velocity' then 
+        "ignorable"
       else
-        if 40 > velocity' then 
-          "urgent"
+        if 60 > velocity' then 
+          ""
         else 
-          if 60 > velocity' then 
-            "urgenter"
-          else "critical"
+          if 90 > velocity' then 
+            "urgent"
+          else 
+            if 120 > velocity' then
+              "urgenter"
+            else "critical"
   in
   div
   [ class "velocity-gauge" ]
-  [ point "speed" 
+  [ ignorablePoint "speed" 
   , p
     [class ("point " ++ urgency) ]
     [ text

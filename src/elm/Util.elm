@@ -2,6 +2,7 @@ module Util exposing (..)
 
 import Random
 import List
+import Dict exposing (insert, Dict)
 import Char  
 import String
 import Types exposing (..)
@@ -55,7 +56,15 @@ moduloAngle a =
   let a' = floor a in
   (toFloat (a' % 360)) + (a - (toFloat a'))
 
+--SPACE OBJECT DICT / LIST MANIPULATION
 
+isLocal : UUID -> SpaceObject -> Bool
+isLocal playersId object =
+  playersId == object.owner
+
+addObject : SpaceObject -> Dict String SpaceObject -> Dict String SpaceObject
+addObject newObject objects =
+  insert newObject.uuid newObject objects
 
 bundle : SpaceObject -> (UUID, SpaceObject)
 bundle object = (object.uuid, object)
