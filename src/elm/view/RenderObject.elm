@@ -6,7 +6,7 @@ import Html.Events      exposing (..)
 import Collage          exposing (..)
 import Element          exposing (..)
 import List             exposing (filter, map, reverse)
-import Util             exposing (root)
+import Util             exposing (root, image')
 import Types            exposing (..)
 import SpaceObject      exposing (..)
 import Engine           exposing (..)
@@ -72,9 +72,6 @@ drawThruster boost {type'} =
     MissileMain ->
       move (0, -11) <| image' 5 14 <| "blasts/missile-blast"
 
-image' : Int -> Int -> String -> Form
-image' w h src = 
-  root src |> image w h |> toForm
 
 thruster : Boost -> Dimensions -> Coordinate -> String -> Form
 thruster boost (w, h) position source =

@@ -9,9 +9,8 @@ import Transform        exposing (..)
 import Types            exposing (Msg, Coordinate)
 import SpaceObject      exposing (SpaceObject, SpaceObjects, Player)
 import List             exposing (append, map, maximum)
-import Util             exposing (root)
+import Util             exposing (root, image')
 import Maybe            exposing (withDefault)
-import Debug exposing (log)
 
 bigMap : Player -> SpaceObjects -> Html Msg
 bigMap {global} objects =
@@ -50,9 +49,4 @@ draw {sprite, angle, global} =
   |>image' w' h'
   |>rotate (degrees a)
   |>move (position global)
-
-image' : Int -> Int -> String -> Form
-image' w h src = 
-  root src |> image w h |> toForm
-
 

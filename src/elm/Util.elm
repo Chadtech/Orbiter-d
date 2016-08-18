@@ -81,6 +81,9 @@ bundle object = (object.uuid, object)
 layerer : List Form -> Form
 layerer = toForm << collage 1200 1200
 
+image' : Int -> Int -> String -> Form
+image' w h = root >> image w h >> toForm
+
 
 -- SOURCES AND DIRECTORIES
 
