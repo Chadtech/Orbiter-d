@@ -70,7 +70,7 @@ isolatePlayer model =
     objects =
       localObjects
       |>justObjects
-      |>filter (isntPlayer playerId)
+      |>filter (isntPlayer focusOn)
       |>append (justObjects remoteObjects)
       
   in (player, objects)
