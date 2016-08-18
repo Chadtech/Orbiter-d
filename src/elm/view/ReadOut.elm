@@ -3,9 +3,9 @@ module ReadOut exposing (readOut)
 import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
-import Types            exposing (Msg)
+import Types            exposing (..)
 import Game             exposing (Model)
-import SpaceObject      exposing (Player)
+import SpaceObject      exposing (..)
 import Components       exposing (..)
 import List             exposing (unzip, map)
 import String           exposing (slice, length)
@@ -14,13 +14,16 @@ import String           exposing (slice, length)
 readOut : Player -> Html Msg
 readOut player =
   let
-    (left, right) = content player
+    child =
+      if player.type' == Ship then
+        let (left, right) = content player in
+        [ column left, column right ]
+      else []
   in
   div
   [ class "read-out-container" ]
-  [ column left
-  , column right
-  ]
+  child
+
 
 column : List (Html Msg) -> Html Msg
 column list =

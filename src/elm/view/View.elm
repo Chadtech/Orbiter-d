@@ -34,13 +34,13 @@ view model =
   [ veryIgnorablePoint "Game : Orbiter D"
   , div
     [ class "main" ]
-    [ div
-      [ class "left-hud" ]
-      [ instructions
-      , keyDiagram
-      , keyExample
-      ]
-    , chatroom model
+    --[ div
+    --  [ class "left-hud" ]
+    --  [ instructions
+    --  , keyDiagram
+    --  , keyExample
+    --  ]
+    [ chatroom model
     , if bigMapUp then bigMap player objects
       else
       div
@@ -48,8 +48,8 @@ view model =
       [ gameScope player objects 
       , navMarkers player objects
       , velocityGauge player
-      , diedNotice model.died model.deathMessage
       ]
+    , diedNotice model.died model.deathMessage
     , div
       [ class "right-hud" ]
       [ miniMap player objects
