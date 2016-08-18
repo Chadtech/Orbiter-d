@@ -7,7 +7,7 @@ import Game        exposing (Model)
 import List        exposing (maximum, map, map2, concat, filter, foldr)
 import Dict        exposing (get, insert, union, values, fromList)
 import Maybe       exposing (withDefault)
-import Util        exposing (bundle, isLocal)
+import Util        exposing (bundle, isLocal, elseDummy)
 
 
 dot : Pt -> Pt -> Float
@@ -150,7 +150,7 @@ getPlayer uuid objects =
   |>map bundle
   |>fromList
   |>get uuid
-  |>withDefault dummyShip
+  |>elseDummy
 
 insertObject : SpaceObject -> SpaceObjects -> SpaceObjects
 insertObject object =

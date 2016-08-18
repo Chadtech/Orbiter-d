@@ -4,6 +4,7 @@ import Game exposing (Model)
 import Dict exposing (get, insert)
 import Maybe exposing (withDefault)
 import SpaceObject exposing (..)
+import Util exposing (elseDummy)
 
 setPlayersName : String -> Model -> Model
 setPlayersName newName model =
@@ -14,7 +15,7 @@ setPlayersName newName model =
       let
         player =
           get playerId localObjects
-          |>withDefault dummyShip
+          |>elseDummy
       in
       { player | name = newName }
   in

@@ -27,6 +27,8 @@ nameField name =
   , placeholder "username"
   , spellcheck False
   , class "name-field"
+  , onFocus FocusOnChat
+  , onBlur FocusOnGame
   , onInput UpdateName
   ] []
 
@@ -47,7 +49,7 @@ chatInputField input' =
   , onBlur FocusOnGame
   , onInput UpdateChatInput
   , on "keydown" <| Json.map CheckForEnter keyCode
-  , placeholder "press '~' to chat"
+  , placeholder "chat input"
   , spellcheck False
   ]
   []

@@ -1,14 +1,15 @@
 module HandleDeath exposing (handleDeath)
 
-import Game exposing (..)
-import Types exposing (..)
-import SpaceObject exposing (..)
-import Dict exposing (..)
-import Maybe exposing (withDefault)
-import FellIntoPlanet exposing (fellIntoPlanet)
+import Game               exposing (..)
+import Types              exposing (..)
+import SpaceObject        exposing (..)
+import Dict               exposing (..)
+import Maybe              exposing (withDefault)
+import FellIntoPlanet     exposing (fellIntoPlanet)
 import HighSpeedCollision exposing (highSpeedCollision)
-import RanOutOfAir exposing (ranOutOfAir)
-import List exposing (head)
+import RanOutOfAir        exposing (ranOutOfAir)
+import List               exposing (head)
+import Util               exposing (elseDummy, addObject, makeUUID, getFloat, getSector, modulo)
 
 handleDeath : Model -> Model
 handleDeath model =
@@ -32,7 +33,7 @@ checkIfDead {playerId, localObjects} =
   let
     player = 
       get playerId localObjects
-      |>withDefault dummyShip
+      |>elseDummy
   in
     NotDead
     |>isThereAir player

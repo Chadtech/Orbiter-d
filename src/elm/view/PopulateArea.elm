@@ -9,8 +9,7 @@ import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
 import List             exposing (map, filter)
-import Pather           exposing (root)
-import Util             exposing (layerer)
+import Util             exposing (layerer, root)
 import RenderObject
 
 populateArea : Player -> SpaceObjects -> Form -> Form

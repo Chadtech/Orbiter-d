@@ -24,7 +24,11 @@ import Debug exposing (log)
 
 view : Model -> Html Msg
 view model =
-  let (player, objects) = isolatePlayer model in
+  let 
+    (player, objects) = 
+      isolatePlayer model 
+    {bigMapUp} = model
+  in
   div
   [ class "root" ]
   [ veryIgnorablePoint "Game : Orbiter D"
@@ -37,9 +41,11 @@ view model =
       , keyExample
       ]
     , chatroom model
-    , div
+    , ifBigMapUp bigMapUp
+    <| div
       [ class "game-view" ]
-      [ gameScope player objects 
+      [ if bigMapUp then (span [] [])
+        else gameScope player objects 
       , navMarkers player objects
       , velocityGauge player
       , diedNotice model.died model.deathMessage
@@ -51,6 +57,11 @@ view model =
       ]
     ]
   ]
+
+ifBigMapUp : Bool -> Html Msg -> Html Msg
+ifBigMapUp itsUp game =
+  if itsUp then span [] []
+  else game
 
 isntPlayer : UUID -> SpaceObject -> Bool
 isntPlayer uuid' {uuid} = uuid' /= uuid
@@ -65,7 +76,7 @@ isolatePlayer model =
 
     player =
       get focusOn localObjects
-      |>withDefault dummyShip
+      |>elseDummy
 
     objects =
       localObjects

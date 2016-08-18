@@ -1,11 +1,12 @@
 module HandleMessageSubmit exposing (handleMessageSubmit)
 
-import Game exposing (..)
-import Types exposing (..)
+import Game        exposing (..)
+import Types       exposing (..)
 import SpaceObject exposing (..)
-import Dict exposing (get)
-import Maybe exposing (withDefault)
-import String exposing (length, slice)
+import Dict        exposing (get)
+import Maybe       exposing (withDefault)
+import String      exposing (length, slice)
+import Util        exposing (elseDummy)
 
 handleMessageSubmit : Model -> Model
 handleMessageSubmit model =
@@ -21,7 +22,7 @@ handleMessageSubmit model =
 makeChatMessage : Model -> ChatMessage
 makeChatMessage {playerId, chatInput, localObjects} =
   get playerId localObjects
-  |>withDefault dummyShip
+  |>elseDummy
   |> .name
   |>slice 0 8
   |>ChatMessage chatInput

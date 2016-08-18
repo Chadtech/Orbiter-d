@@ -9,14 +9,14 @@ import Random      exposing (..)
 import List        exposing (head, repeat, foldr)
 import Char        exposing (fromCode)
 import String      exposing (fromChar)
-import Util        exposing (addObject, makeUUID, getFloat, getSector, modulo)
+import Util        exposing (elseDummy, addObject, makeUUID, getFloat, getSector, modulo)
 
 ranOutOfAir : Model -> Model
 ranOutOfAir model =
   let
     player =
       get model.playerId model.localObjects
-      |>withDefault dummyShip
+      |>elseDummy
 
     (deadPlayer, seed) =
       makeDebris model.seed player

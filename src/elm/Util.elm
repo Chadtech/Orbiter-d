@@ -2,14 +2,15 @@ module Util exposing (..)
 
 import Random
 import List
-import Dict exposing (insert, Dict)
+import Dict        exposing (insert, Dict)
 import Char  
 import String
-import Types exposing (..)
+import Types       exposing (..)
 import SpaceObject exposing (..)
-import Collage          exposing (..)
-import Element          exposing (..)
-import Transform        exposing (..)
+import Collage     exposing (..)
+import Element     exposing (..)
+import Transform   exposing (..)
+import Maybe
 
 --RANDOM
 
@@ -56,7 +57,12 @@ moduloAngle a =
   let a' = floor a in
   (toFloat (a' % 360)) + (a - (toFloat a'))
 
+
 --SPACE OBJECT DICT / LIST MANIPULATION
+
+elseDummy : Maybe SpaceObject -> SpaceObject
+elseDummy =
+  Maybe.withDefault dummyShip
 
 isLocal : UUID -> SpaceObject -> Bool
 isLocal playersId object =
@@ -74,3 +80,12 @@ bundle object = (object.uuid, object)
 
 layerer : List Form -> Form
 layerer = toForm << collage 1200 1200
+
+
+-- SOURCES AND DIRECTORIES
+
+root : String -> String
+root s = root' ++ s ++ ".png"
+
+root' : String
+root' = "./"

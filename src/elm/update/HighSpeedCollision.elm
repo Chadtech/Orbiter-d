@@ -9,14 +9,14 @@ import Random      exposing (..)
 import List        exposing (head, repeat, foldr)
 import Char        exposing (fromCode)
 import String      exposing (fromChar)
-import Util        exposing (addObject, makeUUID, getFloat, getSector, modulo)
+import Util        exposing (elseDummy, addObject, makeUUID, getFloat, getSector, modulo)
 
 highSpeedCollision : Model -> Model
 highSpeedCollision model =
   let
     player =
       get model.playerId model.localObjects
-      |>withDefault dummyShip
+      |>elseDummy
 
     (debris, seed1) =
       foldr 

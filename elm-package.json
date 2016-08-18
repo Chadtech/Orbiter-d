@@ -8,7 +8,8 @@
         "./src/elm/view",
         "./src/elm/update",
         "./src/elm/websockets",
-        "./src/elm/types"
+        "./src/elm/types",
+        "./src/elm/keys"
     ],
     "exposed-modules": [],
     "dependencies": {

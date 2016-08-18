@@ -9,9 +9,8 @@ import Transform        exposing (..)
 import Types            exposing (Msg, Coordinate)
 import SpaceObject      exposing (SpaceObject, SpaceObjects, Player)
 import List             exposing (append, map, maximum)
-import Pather           exposing (root)
-import Maybe exposing (withDefault)
-import Debug exposing (log)
+import Util             exposing (root)
+import Maybe            exposing (withDefault)
 
 miniMap : Player -> SpaceObjects -> Html Msg
 miniMap {global} objects =

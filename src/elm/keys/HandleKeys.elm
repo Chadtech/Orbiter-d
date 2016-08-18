@@ -12,6 +12,7 @@ import Init             exposing (makePlayer)
 import SetEngine        exposing (setEngine)
 import Random           exposing (Seed)
 import InsertMissile    exposing (insertMissile)
+import Util             exposing (elseDummy)
 
 handleKeys : Model -> Keyboard.Model -> Model
 handleKeys model keys =
@@ -19,6 +20,7 @@ handleKeys model keys =
     model' =
       model
       |>setChatInFocus keys
+      |>setBigMap keys
       |>setKeys keys
   in
     if model.died then
@@ -35,7 +37,8 @@ normalConditions keys model =
     (seed, localObjects) =
       if isPressed Keyboard.CharG keys && (not model.chatInFocus) then
         insertMissile model
-      else (model.seed, model.localObjects)
+      else 
+        (model.seed, model.localObjects)
   in
   { model
   | localObjects = 
@@ -44,7 +47,7 @@ normalConditions keys model =
         let
           player = 
             get model.playerId localObjects
-            |>withDefault dummyShip
+            |>elseDummy
             |>setEngine keys
         in
           insert model.playerId player localObjects
@@ -65,6 +68,11 @@ setChatInFocus keys model =
       else
         chatInFocus
   }
+
+setBigMap : Keyboard.Model -> Model -> Model
+setBigMap keys model =
+  let tIsPressed = isPressed Keyboard.CharT keys in
+  { model | bigMapUp = tIsPressed && (not model.chatInFocus)}
 
 resetGame : Keyboard.Model -> Model -> Model
 resetGame keys model =

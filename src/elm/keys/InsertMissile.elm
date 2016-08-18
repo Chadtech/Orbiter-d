@@ -11,7 +11,7 @@ import SpaceObject      exposing (..)
 import Maybe            exposing (withDefault)
 import Util             exposing (modulo, getSector, makeUUID)
 import Random           exposing (Seed)
-import Util             exposing (addObject)
+import Util             exposing (addObject, elseDummy)
 
 
 insertMissile : Model -> (Seed, Dict String SpaceObject)
@@ -19,7 +19,7 @@ insertMissile model =
   let
     player =
       get model.playerId model.localObjects
-      |>withDefault dummyShip
+      |>elseDummy
   in
     if player.missiles > 0 then
       let

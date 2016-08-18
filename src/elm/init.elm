@@ -8,7 +8,7 @@ import Engine      exposing (..)
 import Dict        exposing (fromList, get)
 import List        exposing (map2, map, foldr, length)
 import Maybe       exposing (withDefault)
-import Util        exposing (makeUUID, bundle, getFloat)
+import Util        exposing (makeUUID, bundle, getFloat, elseDummy)
 
 
 init : Model -> Model
@@ -28,7 +28,7 @@ init model =
   , focusOn = playerId
   , playerName = 
       get playerId localObjects
-      |>withDefault dummyShip
+      |>elseDummy
       |> .name
   , localObjects = localObjects
   , seed = seed'

@@ -7,12 +7,11 @@ import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
 import List             exposing (filter, map)
-import Pather           exposing (root)
 import Types            exposing (..)
 import SpaceObject      exposing (..)
 import RenderObject     exposing (draw)
 import PopulateArea     exposing (populateArea)
-import Util             exposing (layerer)
+import Util             exposing (layerer, root)
 
 gameScope : Player -> SpaceObjects -> Html Msg
 gameScope player objects =

@@ -9,7 +9,7 @@ import Collage          exposing (..)
 import Element          exposing (..)
 import Transform        exposing (..)
 import List             exposing (filter, map, concat, append)
-import Pather           exposing (root)
+import Util             exposing (root)
 
 navMarkers : Player -> SpaceObjects -> Html Msg
 navMarkers player objects =
