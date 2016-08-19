@@ -206,7 +206,7 @@ chatMessageDecoder =
   succeed ChatMessagePayload
   |: ("name" := string)
   |: ("message" := string)  
-  |: ("ownerid" := string)
+  |: ("owner" := string)
 
 
 
