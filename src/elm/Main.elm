@@ -93,7 +93,7 @@ update msg model =
         ({model | sinceLastPost = sinceLastPost}, Cmd.none)
 
     Refresh dt ->
-      (refresh (rate dt) model, Cmd.none)
+      (refresh (rate (Debug.log "DT" 30)) model, Cmd.none)
 
     UpdateKeys keyMsg ->
       let

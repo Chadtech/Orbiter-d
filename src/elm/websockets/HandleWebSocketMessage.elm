@@ -21,6 +21,9 @@ type alias SpaceObjectPayload =
   , angle : Float
   , anglevelocity : Float
   , boost : Bool
+  , mass : Float
+  , air : Float
+  , fuel : Float
   , thrusters : List ThrusterPayload
   }
 
@@ -90,9 +93,9 @@ spaceObject payload =
         "Ship" -> (34, 29)
         _ -> (20, 20)
   , sector = sector
-  , fuel = 0
-  , air = 0
-  , mass = 0
+  , fuel = payload.fuel
+  , air = payload.air
+  , mass = payload.mass
   , missiles = 0
   , type' =
       case payload.type' of
@@ -158,6 +161,9 @@ spaceObjectDecoder =
     |: ("angle" := float)
     |: ("angle_velocity" := float)
     |: ("boost" := bool)
+    |: ("mass" := float)
+    |: ("air" := float)
+    |: ("fuel" := float)
     |: thrusterDecoder
 
 thrusterDecoder : Decoder (List ThrusterPayload)
