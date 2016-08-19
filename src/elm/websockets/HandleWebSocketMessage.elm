@@ -35,6 +35,7 @@ type alias ThrusterPayload =
 type alias ChatMessagePayload =
   { name : String
   , message : String
+  , ownerid : String
   }
 
 handleWebSocketMessage : String -> Model -> Model
@@ -205,6 +206,7 @@ chatMessageDecoder =
   succeed ChatMessagePayload
   |: ("name" := string)
   |: ("message" := string)  
+  |: ("ownerid" := string)
 
 
 
