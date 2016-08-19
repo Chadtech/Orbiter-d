@@ -1,5 +1,3 @@
-import Html             exposing (..)
-import Html.Attributes  exposing (..)
 import Html.App         as App
 import AnimationFrame   exposing (..)
 import Keyboard.Extra   as Keyboard
@@ -18,11 +16,17 @@ import HandleMessageSubmit    exposing (handleMessageSubmit)
 import HandleWebSocketMessage exposing (handleWebSocketMessage)
 import Refresh                exposing (refresh)
 import WebSocket
-import Dom
 import Task
+import Json.Encode exposing (..)
+import Debug
+
+import Util exposing (elseDummy)
 
 rate : Time -> Time
 rate dt = dt / 240
+
+backEnd : String
+backEnd = "ws://ctuniverse.zrg.cc/ws"
 
 main =
   App.program
@@ -38,7 +42,8 @@ subscriptions {ready} =
     Sub.batch
     [ Sub.map UpdateKeys Keyboard.subscriptions
     , diffs Refresh
-    , WebSocket.listen "ws://ctuniverse.zrg.cc/ws" WSRecieve
+    , diffs WebSocketSend
+    , WebSocket.listen backEnd WebsocketRecieve
     ]
   else 
     times PopulateFromRandomness
@@ -47,8 +52,45 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of 
 
-    WSRecieve json ->
+    WebsocketRecieve json ->
       (handleWebSocketMessage json model, Cmd.none)
+
+    WebSocketSend dt ->
+      let sinceLastPost = dt + model.sinceLastPost in
+      if sinceLastPost > 1000 then
+        let
+          player =
+            Dict.get model.playerId model.localObjects
+            |>elseDummy
+
+          playerMsg =
+            (object >> encode 0 >> Debug.log "OBJECT")
+            [ (,) 
+                "o" <|
+                object
+                [ ("uuid", string player.uuid)
+                , ("owner", string player.owner)
+                , ("type", string "Ship")
+                , ("name", string player.name)
+                , ("global", list [float (fst player.global), float (snd player.global)])
+                , ("velocity", list [ float (fst player.velocity), float (snd player.velocity)])
+                , ("angle", float (fst player.angle))
+                , ("angle_velocity", float (snd player.angle))
+                , ("boost", bool (player.engine.boost))
+                , ("air", float (player.air))
+                , ("fuel", float (player.fuel))
+                , ("mass", float (player.mass))
+                , ("thrusters", list [])
+                ]
+            , (,) "messagetype" (string "SpaceObject")
+            ]
+
+          --ya = Debug.log "YES" "WOW"
+
+        in
+        ({model | sinceLastPost = 0 }, WebSocket.send backEnd playerMsg)
+      else
+        ({model | sinceLastPost = sinceLastPost}, Cmd.none)
 
     Refresh dt ->
       (refresh (rate dt) model, Cmd.none)

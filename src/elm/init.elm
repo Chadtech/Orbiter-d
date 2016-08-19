@@ -45,7 +45,8 @@ initLocalObjects seed uuid =
       foldr 
         (always (addSpaceObject uuid)) 
         ([], seed')
-        [0..15]
+        []
+        --[0..15]
   in
     (map bundle (player :: objects) |> fromList, seed')
 

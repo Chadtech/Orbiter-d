@@ -11,6 +11,7 @@ type alias Sector     = (Int, Int)
 type alias Dimensions = (Int, Int)
 type alias UUID       = String
 type alias Name       = String
+type alias JSON       = String
 type alias Boost      = Bool
 
 type Msg 
@@ -20,7 +21,8 @@ type Msg
   | UpdateName String
   | UpdateChatInput String
   | CheckForEnter Int
-  | WSRecieve String
+  | WebsocketRecieve JSON
+  | WebSocketSend Time
   | FocusOnChat
   | FocusOnGame
 

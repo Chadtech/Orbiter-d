@@ -23,6 +23,7 @@ type alias Model =
   , chatInFocus   : Bool
   , fireIsDown    : Bool
   , bigMapUp      : Bool
+  , sinceLastPost : Float
   }
 
 init : Model
@@ -42,6 +43,7 @@ init =
   , chatInFocus   = False
   , fireIsDown    = False
   , bigMapUp      = False
+  , sinceLastPost = 0
   }
 
 
