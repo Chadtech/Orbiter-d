@@ -20,7 +20,7 @@ handleMessageSubmit model =
   else
   model
 
-makeChatMessage : Model -> ChatMessage
-makeChatMessage {playerName, chatInput} =
-  slice 0 8 playerName
-  |>ChatMessage chatInput
+--makeChatMessage : Model -> ChatMessage
+--makeChatMessage {playerName, chatInput} =
+--  slice 0 8 playerName
+--  |>ChatMessage (toUpper chatInput)

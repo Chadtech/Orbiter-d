@@ -143,7 +143,7 @@ update msg model =
       if isEnter || isSquiggle then (model, Cmd.none)
       else
         if (length string) < 45 then
-          ({model | chatInput = string}, Cmd.none)
+          ({model | chatInput = (String.toUpper string)}, Cmd.none)
         else 
           (model, Cmd.none)
 
