@@ -117,7 +117,7 @@ update msg model =
             [ ("o"
               , object 
                 [ ("name", string model.playerName)
-                , ("message", string model.chatInput)
+                , ("message", string (String.toUpper model.chatInput))
                 , ("ownerid", string model.playerId)
                 ]
               )
