@@ -10,14 +10,14 @@ import Util        exposing (elseDummy)
 
 handleMessageSubmit : Model -> Model
 handleMessageSubmit model =
-  if length model.chatInput > 0 then
-    { model
-    | chatMessages =
-        (makeChatMessage model) :: model.chatMessages
-    , chatInput = ""
-    }
-  else
-    model
+  --if length model.chatInput > 0 then
+  --  { model
+  --  | chatMessages =
+  --      (makeChatMessage model) :: model.chatMessages
+  --  , chatInput = ""
+  --  }
+  --else
+  model
 
 makeChatMessage : Model -> ChatMessage
 makeChatMessage {playerName, chatInput} =

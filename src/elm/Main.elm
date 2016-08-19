@@ -113,6 +113,7 @@ update msg model =
       if code == 13 then
         let
           chatPayload =
+            Debug.log "THIS IS CHAT PAYLOAD" <|
             (object >> encode 0)
             [ ("o"
               , object 
