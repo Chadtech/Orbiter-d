@@ -57,7 +57,7 @@ update msg model =
 
     WebSocketSend dt ->
       let sinceLastPost = dt + model.sinceLastPost in
-      if sinceLastPost > 1000 then
+      if sinceLastPost > 200 then
         let
           player =
             Dict.get model.playerId model.localObjects

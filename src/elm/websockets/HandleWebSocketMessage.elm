@@ -109,7 +109,7 @@ spaceObject payload =
   , sprite =
       case payload.type' of
         "Ship" ->
-        { src        = "ship/ship"
+        { src        = "ship/ship-1"
         , dimensions = (47, 47)
         , area       = (138, 138)
         , position   = (0,0)
