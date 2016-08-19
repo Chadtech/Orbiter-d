@@ -20,7 +20,7 @@ type alias SpaceObjectPayload =
   , velocity: Coordinate
   , angle : Float
   , anglevelocity : Float
-  , boost : Int
+  , boost : Bool
   , thrusters : List ThrusterPayload
   }
 
@@ -40,7 +40,6 @@ handleWebSocketMessage json model =
     case messageType of
       ("SpaceObject", _) ->
         handleObjectUpdate json model 
-
       _ -> 
         model
 
@@ -60,7 +59,11 @@ handleObjectUpdate json model =
             object
             model.remoteObjects
       }
-    Err _ -> model
+    Err _ ->
+      let
+        ya = Debug.log "json is" json
+      in
+      model
 
 spaceObject : SpaceObjectPayload -> SpaceObject
 spaceObject payload =
@@ -99,7 +102,7 @@ spaceObject payload =
   , uuid = payload.uuid
   , owner = payload.owner
   , engine = 
-    { boost = payload.boost == 1
+    { boost = payload.boost
     , thrusters = 
         List.map thruster payload.thrusters
     }
@@ -154,7 +157,7 @@ spaceObjectDecoder =
     |: ("velocity" := (tuple2 (,) float float))
     |: ("angle" := float)
     |: ("angle_velocity" := float)
-    |: ("boost" := int)
+    |: ("boost" := bool)
     |: thrusterDecoder
 
 thrusterDecoder : Decoder (List ThrusterPayload)

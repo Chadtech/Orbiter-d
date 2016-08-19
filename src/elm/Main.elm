@@ -64,7 +64,7 @@ update msg model =
             |>elseDummy
 
           playerMsg =
-            (object >> encode 0 >> Debug.log "OBJECT")
+            (object >> encode 0)
             [ (,) 
                 "o" <|
                 object
