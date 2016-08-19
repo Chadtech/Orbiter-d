@@ -42,7 +42,7 @@ subscriptions {ready} =
     Sub.batch
     [ Sub.map UpdateKeys Keyboard.subscriptions
     , diffs Refresh
-    , diffs WebSocketSend
+    , diffs WebSocketSendObject
     , WebSocket.listen backEnd WebsocketRecieve
     ]
   else 
@@ -55,7 +55,7 @@ update msg model =
     WebsocketRecieve json ->
       (handleWebSocketMessage json model, Cmd.none)
 
-    WebSocketSend dt ->
+    WebSocketSendObject dt ->
       let sinceLastPost = dt + model.sinceLastPost in
       if sinceLastPost > 200 then
         let
@@ -93,7 +93,7 @@ update msg model =
         ({model | sinceLastPost = sinceLastPost}, Cmd.none)
 
     Refresh dt ->
-      (refresh (rate (Debug.log "DT" dt)) model, Cmd.none)
+      (refresh (rate dt) model, Cmd.none)
 
     UpdateKeys keyMsg ->
       let
@@ -111,7 +111,20 @@ update msg model =
 
     CheckForEnter code ->
       if code == 13 then
-        (handleMessageSubmit model, Cmd.none)
+        let
+          chatPayload =
+            (object >> encode 0)
+            [ ("o"
+              , object 
+                [ ("name", string model.playerName)
+                , ("message", string model.chatInput)
+                ]
+              )
+            , ("messagetype", string "SpaceChat")
+            ]
+
+        in
+        (handleMessageSubmit model, WebSocket.send backEnd chatPayload)
       else (model, Cmd.none)
 
     FocusOnChat ->

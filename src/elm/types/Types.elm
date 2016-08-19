@@ -22,7 +22,7 @@ type Msg
   | UpdateChatInput String
   | CheckForEnter Int
   | WebsocketRecieve JSON
-  | WebSocketSend Time
+  | WebSocketSendObject Time
   | FocusOnChat
   | FocusOnGame
 

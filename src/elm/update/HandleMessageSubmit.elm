@@ -20,9 +20,6 @@ handleMessageSubmit model =
     model
 
 makeChatMessage : Model -> ChatMessage
-makeChatMessage {playerId, chatInput, localObjects} =
-  get playerId localObjects
-  |>elseDummy
-  |> .name
-  |>slice 0 8
+makeChatMessage {playerName, chatInput} =
+  slice 0 8 playerName
   |>ChatMessage chatInput

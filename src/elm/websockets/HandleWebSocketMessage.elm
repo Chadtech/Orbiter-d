@@ -32,6 +32,11 @@ type alias ThrusterPayload =
   , type' : String
   }
 
+type alias ChatMessagePayload =
+  { name : String
+  , message : String
+  }
+
 handleWebSocketMessage : String -> Model -> Model
 handleWebSocketMessage json model =
   let
@@ -43,6 +48,25 @@ handleWebSocketMessage json model =
     case messageType of
       ("SpaceObject", _) ->
         handleObjectUpdate json model 
+      ("SpaceChat", _) ->
+        case decodeChatMessage json of
+          Ok payload ->
+            let
+              newMessage =
+                let {name, message} = payload in
+                { content = message
+                , speaker = name
+                }
+            in
+            { model 
+            | chatMessages = 
+                newMessage :: model.chatMessages
+            }
+          Err _ ->
+            let
+              ya = Debug.log "json is" json
+            in
+            model
       _ -> 
         model
 
@@ -63,9 +87,6 @@ handleObjectUpdate json model =
             model.remoteObjects
       }
     Err _ ->
-      let
-        ya = Debug.log "json is" json
-      in
       model
 
 spaceObject : SpaceObjectPayload -> SpaceObject
@@ -149,22 +170,27 @@ decodeSpaceObject : String -> Result String SpaceObjectPayload
 decodeSpaceObject =
   decodeString (object1 identity ("o" := spaceObjectDecoder))
 
+
+decodeChatMessage : String -> Result String ChatMessagePayload
+decodeChatMessage =
+  decodeString (object1 identity ("o" := chatMessageDecoder))
+
 spaceObjectDecoder : Decoder SpaceObjectPayload
 spaceObjectDecoder =
   succeed SpaceObjectPayload
-    |: ("uuid" := string)
-    |: ("owner" := string)
-    |: ("name" := string)
-    |: ("type" := string)
-    |: ("global" := (tuple2 (,) float float))
-    |: ("velocity" := (tuple2 (,) float float))
-    |: ("angle" := float)
-    |: ("angle_velocity" := float)
-    |: ("boost" := bool)
-    |: ("mass" := float)
-    |: ("air" := float)
-    |: ("fuel" := float)
-    |: thrusterDecoder
+  |: ("uuid" := string)
+  |: ("owner" := string)
+  |: ("name" := string)
+  |: ("type" := string)
+  |: ("global" := (tuple2 (,) float float))
+  |: ("velocity" := (tuple2 (,) float float))
+  |: ("angle" := float)
+  |: ("angle_velocity" := float)
+  |: ("boost" := bool)
+  |: ("mass" := float)
+  |: ("air" := float)
+  |: ("fuel" := float)
+  |: thrusterDecoder
 
 thrusterDecoder : Decoder (List ThrusterPayload)
 thrusterDecoder =
@@ -173,3 +199,14 @@ thrusterDecoder =
     ("type" := string)
   |>list
   |>(:=) "thrusters"
+
+chatMessageDecoder : Decoder ChatMessagePayload
+chatMessageDecoder =
+  succeed ChatMessagePayload
+  |: ("name" := string)
+  |: ("message" := string)  
+
+
+
+
+
