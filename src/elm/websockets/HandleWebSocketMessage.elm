@@ -87,7 +87,7 @@ spaceObject payload =
   , direction = direction
   , dimensions =
       case payload.type' of
-        "ship" -> (34, 29)
+        "Ship" -> (34, 29)
         _ -> (20, 20)
   , sector = sector
   , fuel = 0
@@ -96,7 +96,7 @@ spaceObject payload =
   , missiles = 0
   , type' =
       case payload.type' of
-        "ship" -> Ship
+        "Ship" -> Ship
         _ -> AirTank
   , name = "THOMAS"
   , uuid = payload.uuid
@@ -108,7 +108,7 @@ spaceObject payload =
     }
   , sprite =
       case payload.type' of
-        "ship" ->
+        "Ship" ->
         { src        = "ship/ship"
         , dimensions = (47, 47)
         , area       = (138, 138)
