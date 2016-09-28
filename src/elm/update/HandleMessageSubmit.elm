@@ -12,15 +12,15 @@ handleMessageSubmit : Model -> Model
 handleMessageSubmit model =
   if length model.chatInput > 0 then
     { model
-    --| chatMessages =
-    --    (makeChatMessage model) :: model.chatMessages
-    --, chatInput = ""
-    | chatInput = ""
+    | chatMessages =
+        (makeChatMessage model) :: model.chatMessages
+    , chatInput = ""
+    --| chatInput = ""
     }
   else
   model
 
---makeChatMessage : Model -> ChatMessage
---makeChatMessage {playerName, chatInput} =
---  slice 0 8 playerName
---  |>ChatMessage (toUpper chatInput)
+makeChatMessage : Model -> ChatMessage
+makeChatMessage {playerName, chatInput} =
+  slice 0 8 playerName
+  |>ChatMessage chatInput

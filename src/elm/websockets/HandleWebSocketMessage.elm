@@ -9,6 +9,7 @@ import Engine exposing (..)
 import List
 import Dict exposing (insert)
 import Util exposing (modulo, getSector)
+import HandlePhysics exposing (physics)
 
 
 type alias SpaceObjectPayload =
@@ -84,7 +85,7 @@ handleObjectUpdate json model =
       | remoteObjects = 
           insert
             object.uuid
-            object
+            (physics 1.9 object)
             model.remoteObjects
       }
     Err _ ->

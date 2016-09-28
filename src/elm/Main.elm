@@ -18,7 +18,9 @@ import Refresh                exposing (refresh)
 import WebSocket
 import Task
 import Json.Encode exposing (..)
-import Debug
+import PageVisibility   exposing (..)
+
+import Debug exposing (log)
 
 import Util exposing (elseDummy)
 
@@ -42,8 +44,9 @@ subscriptions {ready} =
     Sub.batch
     [ Sub.map UpdateKeys Keyboard.subscriptions
     , diffs Refresh
-    , diffs WebSocketSendObject
+    --, diffs WebSocketSendObject
     , WebSocket.listen backEnd WebsocketRecieve
+    , visibilityChanges HandleVisibility
     ]
   else 
     times PopulateFromRandomness
@@ -84,16 +87,16 @@ update msg model =
                 ]
             , (,) "messagetype" (string "SpaceObject")
             ]
-
-          --ya = Debug.log "YES" "WOW"
-
         in
         ({model | sinceLastPost = 0 }, WebSocket.send backEnd playerMsg)
       else
         ({model | sinceLastPost = sinceLastPost}, Cmd.none)
 
     Refresh dt ->
-      (refresh (rate dt) model, Cmd.none)
+      if model.paused then
+        (model, Cmd.none)
+      else
+        (refresh (rate dt) model, Cmd.none)
 
     UpdateKeys keyMsg ->
       let
@@ -117,7 +120,7 @@ update msg model =
             [ ("o"
               , object 
                 [ ("name", string model.playerName)
-                , ("message", string (String.toUpper model.chatInput))
+                , ("message", string model.chatInput)
                 , ("ownerid", string model.playerId)
                 ]
               )
@@ -143,9 +146,15 @@ update msg model =
       if isEnter || isSquiggle then (model, Cmd.none)
       else
         if (length string) < 45 then
-          ({model | chatInput = (String.toUpper string)}, Cmd.none)
+          ({model | chatInput = string}, Cmd.none)
         else 
           (model, Cmd.none)
+
+    HandleVisibility visibility ->
+      if visibility == Hidden then
+        ({ model | paused = True }, Cmd.none)
+      else
+        (model, Cmd.none)
 
 is : String -> Char -> Bool
 is string char =

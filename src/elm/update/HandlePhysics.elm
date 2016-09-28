@@ -1,4 +1,4 @@
-module HandlePhysics exposing (handlePhysics)
+module HandlePhysics exposing (handlePhysics, physics)
 
 import Types       exposing (..)
 import SpaceObject exposing (SpaceObject, SpaceObjects)

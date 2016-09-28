@@ -3,6 +3,8 @@ module Types exposing (..)
 import Keyboard.Extra as Keyboard
 import Time
 import Dom
+import PageVisibility   exposing (..)
+
 
 type alias Time       = Float
 type alias Angle      = Float
@@ -25,6 +27,7 @@ type Msg
   | WebSocketSendObject Time
   | FocusOnChat
   | FocusOnGame
+  | HandleVisibility Visibility
 
 type alias Sprite =
   { dimensions : Dimensions

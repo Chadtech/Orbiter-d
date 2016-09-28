@@ -16,7 +16,7 @@ import VelocityGauge    exposing (velocityGauge)
 import ChatRoom         exposing (chatroom)
 import BigMap           exposing (bigMap)
 import Died             exposing (diedNotice)
-import Components       exposing (veryIgnorablePoint)
+import Components       exposing (veryIgnorablePoint, point)
 import Dict             exposing (get, toList, Dict)
 import Maybe            exposing (withDefault)
 import List             exposing (filter, append, map)
@@ -31,22 +31,23 @@ view model =
   in
   div
   [ class "root" ]
-  [ veryIgnorablePoint "Game : Orbiter D"
+  [ veryIgnorablePoint "Game : Orbiter 13"
   , div
     [ class "main" ]
-    --[ div
-    --  [ class "left-hud" ]
-    --  [ instructions
-    --  , keyDiagram
-    --  , keyExample
-    --  ]
-    [ chatroom model
+    [ div
+      [ class "left-hud" ]
+      [ instructions
+      , keyDiagram
+      , keyExample
+      ]
+    --[ chatroom model
     , if bigMapUp then bigMap player objects
       else
       div
       [ class "game-view" ]
       [ gameScope player objects 
       , navMarkers player objects
+      , pausedNotice model.paused
       , velocityGauge player
       ]
     , diedNotice model.died model.deathMessage
@@ -57,6 +58,14 @@ view model =
       ]
     ]
   ]
+
+pausedNotice : Bool -> Html Msg
+pausedNotice paused =
+  if paused then
+    div
+    [ class "paused-notice" ]
+    [ point "press 'p' to unpause" ]
+  else span [] []
 
 ifBigMapUp : Bool -> Html Msg -> Html Msg
 ifBigMapUp itsUp game =

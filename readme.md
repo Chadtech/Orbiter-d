@@ -1,8 +1,7 @@
-How often should the client submit its state to the backend?
+# HI THERE
 
-This is how you get this working
-```
->npm install
->elm package install
->gulp
-```
+This is Orbiter 13. Its a spaceship game. You control the 7 thrusters on your ship, as you orbit a planet. You can collect fuel tanks, air tanks, and missiles, but watch out! If you collide with anything youll explode, and just contribute to the mass of space debris in orbit around the planet.
+
+Play it here:
+
+chadtech.us/orbiter-13

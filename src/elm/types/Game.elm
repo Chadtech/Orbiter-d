@@ -24,6 +24,7 @@ type alias Model =
   , fireIsDown    : Bool
   , bigMapUp      : Bool
   , sinceLastPost : Float
+  , paused        : Bool
   }
 
 init : Model
@@ -44,6 +45,7 @@ init =
   , fireIsDown    = False
   , bigMapUp      = False
   , sinceLastPost = 0
+  , paused        = False
   }
 
 

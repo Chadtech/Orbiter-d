@@ -19,7 +19,8 @@ handleKeys model keys =
   let 
     model' =
       model
-      |>setChatInFocus keys
+      --|>setChatInFocus keys
+      |>setPaused keys
       |>setBigMap keys
       |>setKeys keys
   in
@@ -54,6 +55,13 @@ normalConditions keys model =
   , seed = seed
   }
 
+setPaused : Keyboard.Model -> Model -> Model
+setPaused keys model =
+  let {paused} = model in
+  if isPressed Keyboard.CharP keys then
+    { model | paused = not paused }
+  else
+    model
 
 setKeys : Keyboard.Model -> Model -> Model
 setKeys keys model = { model | keys = keys }
